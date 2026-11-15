@@ -40,7 +40,7 @@ Without that define the app never makes a network call. See
 
 ```bash
 flutter analyze
-flutter test                                     # 73 unit + widget tests
+flutter test                                     # 78 unit + widget tests
 flutter test integration_test/register_home_product_test.dart -d linux
 ```
 
@@ -200,7 +200,7 @@ defaults to review against it.
 ## Submission checklist
 
 - [x] Repository with small, conventional commits
-- [x] `flutter analyze` clean, 76 tests passing, integration test green
+- [x] `flutter analyze` clean, 78 tests passing, integration test green
 - [x] Release `.apk` (`flutter build apk --release`)
 - [x] CI workflow (format, analyze, test, release build)
 - [x] README with run steps, versions, architecture, rationale, known gaps
