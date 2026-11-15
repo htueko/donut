@@ -140,6 +140,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
       }
       verify.when(
         onSuccess: (_) {
+          ref
+              .read(registrationDraftProvider.notifier)
+              .update((draft) => draft.copyWith(otp: _code));
           setState(() => _submitting = false);
           context.go('/register/name');
         },
