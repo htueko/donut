@@ -1,0 +1,27 @@
+import 'package:flutter/widgets.dart';
+
+class AppMotion {
+  const AppMotion._();
+
+  static const Duration instant = Duration.zero;
+  static const Duration fast = Duration(milliseconds: 150);
+  static const Duration base = Duration(milliseconds: 280);
+  static const Duration slow = Duration(milliseconds: 450);
+  static const Duration emphasis = Duration(milliseconds: 650);
+  static const Duration ambient = Duration(seconds: 4);
+
+  static const Curve standard = Curves.easeOutCubic;
+  static const Curve decelerate = Curves.easeOut;
+  static const Curve accelerate = Curves.easeIn;
+  static const Curve emphasized = Cubic(0.2, 0, 0, 1);
+  static const Curve overshoot = Cubic(0.34, 1.56, 0.64, 1);
+
+  static const double pressScale = 0.96;
+}
+
+Duration motionScale(BuildContext context, Duration duration) {
+  if (MediaQuery.disableAnimationsOf(context)) {
+    return AppMotion.instant;
+  }
+  return duration;
+}
