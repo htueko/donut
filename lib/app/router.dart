@@ -10,6 +10,7 @@ import '../features/auth/presentation/screens/otp_screen.dart';
 import '../features/auth/presentation/screens/phone_screen.dart';
 import '../features/auth/presentation/screens/welcome_screen.dart';
 import '../features/cart/presentation/cart_screen.dart';
+import '../features/home/presentation/catalog_refresh_listener.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/orders/presentation/orders_screen.dart';
@@ -89,7 +90,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/home',
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) =>
+                const CatalogRefreshListener(child: HomeScreen()),
           ),
           GoRoute(
             path: '/rewards',
