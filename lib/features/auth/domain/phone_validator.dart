@@ -15,10 +15,10 @@ abstract final class PhoneValidator {
 
   static ValidationResult validate(String raw) {
     if (raw.trim().isEmpty) {
-      return ValidationResult.invalid('phoneRequired');
+      return const ValidationResult.invalid('phoneRequired');
     }
     if (normalize(raw) == null) {
-      return ValidationResult.invalid('phoneInvalid');
+      return const ValidationResult.invalid('phoneInvalid');
     }
     return const ValidationResult.valid();
   }

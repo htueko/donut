@@ -13,7 +13,7 @@ abstract final class NameValidator {
     if (trimmed.isEmpty) {
       return required
           ? const ValidationResult.invalid('nameRequired')
-          : ValidationResult.valid();
+          : const ValidationResult.valid();
     }
     if (trimmed.length > maxLength) {
       return const ValidationResult.invalid('nameTooLong');

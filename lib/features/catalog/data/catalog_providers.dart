@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../domain/catalog_repository.dart';
-import 'local/catalog_database.dart';
 import 'catalog_repository_impl.dart';
+import 'local/catalog_database.dart';
 import 'local/catalog_seed.dart';
 
 final catalogDatabaseProvider = Provider<CatalogDatabase>((ref) {

@@ -11,7 +11,7 @@ import 'catalog_tables.dart';
 part 'catalog_database.g.dart';
 
 @DriftDatabase(
-  tables: [Members, Products, Banners, Shops, Challenges, AppMeta],
+  tables: [Members, Products, Banners, Shops, Challenges, AppMeta, Users],
   daos: [CatalogDao],
 )
 class CatalogDatabase extends _$CatalogDatabase {

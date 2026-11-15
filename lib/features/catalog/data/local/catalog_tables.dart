@@ -68,3 +68,14 @@ class AppMeta extends Table {
   @override
   Set<Column> get primaryKey => {key};
 }
+
+class Users extends Table {
+  TextColumn get id => text()();
+  TextColumn get phoneE164 => text()();
+  TextColumn get firstName => text()();
+  TextColumn get lastName => text().nullable()();
+  TextColumn get dateOfBirth => text()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
