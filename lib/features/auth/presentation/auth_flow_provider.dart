@@ -12,6 +12,8 @@ final registrationDraftProvider = StateProvider<RegistrationDraft>(
 
 final initialSessionUserProvider = Provider<AppUser?>((ref) => null);
 
+final loginPhoneProvider = StateProvider<String?>((ref) => null);
+
 class SessionController extends StateNotifier<AppUser?> {
   SessionController(super.initial);
 
