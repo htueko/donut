@@ -65,7 +65,8 @@ class _RewardsContent extends StatelessWidget {
         const SizedBox(height: AppSpacing.xl),
         _ChallengeList(
           challenges: data.challenges,
-          header: AppLocalizations.of(context)?.eatMoreEarnMore ??
+          header:
+              AppLocalizations.of(context)?.eatMoreEarnMore ??
               'Eat more earn more',
         ),
       ],
@@ -160,9 +161,8 @@ class _PointsCard extends StatelessWidget {
   }
 
   String _pointsToNextLabel(BuildContext context, TierProgress progress) {
-    final points = NumberFormat.decimalPattern(
-      'en',
-    ).format(progress.pointsToNext);
+    final points = NumberFormat.decimalPattern('en')
+        .format(progress.pointsToNext);
     final next = progress.nextTier?.displayName ?? 'max';
     return AppLocalizations.of(context)?.pointsToNextTier(points, next) ??
         '$points points to $next';
@@ -190,9 +190,8 @@ class _ChallengeList extends StatelessWidget {
           emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
           earnLabel: l10n?.earn ?? 'Earn',
         ),
-        (context) => GiftPanel(
-          message: l10n?.emptyGeneric ?? 'Nothing here yet',
-        ),
+        (context) =>
+            GiftPanel(message: l10n?.emptyGeneric ?? 'Nothing here yet'),
       ],
     );
   }
@@ -286,7 +285,10 @@ class _StaggeredCardState extends State<_StaggeredCard>
         final t = MediaQuery.disableAnimationsOf(context) ? 1.0 : _enter.value;
         return Opacity(
           opacity: 0.15 + 0.85 * t,
-          child: Transform.translate(offset: Offset(0, (1 - t) * 24), child: widget.child),
+          child: Transform.translate(
+            offset: Offset(0, (1 - t) * 24),
+            child: widget.child,
+          ),
         );
       },
     );

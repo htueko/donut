@@ -40,7 +40,9 @@ void main() {
     }
   }
 
-  testWidgets('wrong codes shake, clear and lock after three tries', (tester) async {
+  testWidgets('wrong codes shake, clear and lock after three tries', (
+    tester,
+  ) async {
     await pumpOtp(tester);
 
     await typeCode(tester, '111111');

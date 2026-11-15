@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -36,7 +37,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get phoneHint => 'ဖုန်းနံပါတ်';
 
   @override
-  String get phoneInvalid => '+95 နောက်မှာ ၉ ဖြင့် စပြီး ဂဏန်း ၇ မှ ၉ လုံး ထည့်ပါ';
+  String get phoneInvalid =>
+      '+95 နောက်မှာ ၉ ဖြင့် စပြီး ဂဏန်း ၇ မှ ၉ လုံး ထည့်ပါ';
 
   @override
   String get verifyTitle => 'သင့်နံပါတ်ကို အတည်ပြုပါ';
@@ -58,7 +60,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get otpInvalid => 'ကုဒ် မမှန်ပါ။ ထပ်စမ်းကြည့်ပါ။';
 
   @override
-  String get otpLocked => 'အလွန်အကျွံ မှားခဲ့ပါတယ်။ ကုဒ်အသစ် ရယူရန် ပြန်ပို့ကို နှိပ်ပါ။';
+  String get otpLocked =>
+      'အလွန်အကျွံ မှားခဲ့ပါတယ်။ ကုဒ်အသစ် ရယူရန် ပြန်ပို့ကို နှိပ်ပါ။';
 
   @override
   String get firstNameLabel => 'အမည် ပထမစကားလုံး';

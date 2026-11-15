@@ -62,24 +62,27 @@ void main() {
     expect(result.failureOrNull, isA<NetworkFailure>());
   });
 
-  test('refresh keeps local data intact when the payload is malformed', () async {
-    final before = await db.catalogDao.loadCatalog();
-    final dio = MockDio(
-      responses: {
-        '/v1/products': {'data': 'not-a-list'},
-        '/v1/banners': {'data': <dynamic>[]},
-        '/v1/shops': {'data': <dynamic>[]},
-        '/v1/challenges': {'data': <dynamic>[]},
-        '/v1/member': {'data': 'not-a-map'},
-      },
-    );
+  test(
+    'refresh keeps local data intact when the payload is malformed',
+    () async {
+      final before = await db.catalogDao.loadCatalog();
+      final dio = MockDio(
+        responses: {
+          '/v1/products': {'data': 'not-a-list'},
+          '/v1/banners': {'data': <dynamic>[]},
+          '/v1/shops': {'data': <dynamic>[]},
+          '/v1/challenges': {'data': <dynamic>[]},
+          '/v1/member': {'data': 'not-a-map'},
+        },
+      );
 
-    final result = await CatalogSync(dio, db).refresh();
+      final result = await CatalogSync(dio, db).refresh();
 
-    expect(result, isA<FailureResult<void>>());
-    final after = await db.catalogDao.loadCatalog();
-    expect(after.products.length, before.products.length);
-  });
+      expect(result, isA<FailureResult<void>>());
+      final after = await db.catalogDao.loadCatalog();
+      expect(after.products.length, before.products.length);
+    },
+  );
 }
 
 List<Map<String, dynamic>> _envelopeList(List<Map<String, dynamic>> items) =>
@@ -100,7 +103,12 @@ final _products = <Map<String, dynamic>>[
 ];
 
 final _banners = <Map<String, dynamic>>[
-  {'id': 'b_1', 'imageUrl': 'assets/seed/images/banner_specials.png', 'title': 'Specials', 'sortOrder': 0},
+  {
+    'id': 'b_1',
+    'imageUrl': 'assets/seed/images/banner_specials.png',
+    'title': 'Specials',
+    'sortOrder': 0,
+  },
 ];
 
 final _shops = <Map<String, dynamic>>[
@@ -115,7 +123,13 @@ final _shops = <Map<String, dynamic>>[
 ];
 
 final _challenges = <Map<String, dynamic>>[
-  {'id': 'ch_donuts', 'title': 'Eat 4 donuts', 'kind': 'donut', 'current': 1, 'target': 4},
+  {
+    'id': 'ch_donuts',
+    'title': 'Eat 4 donuts',
+    'kind': 'donut',
+    'current': 1,
+    'target': 4,
+  },
 ];
 
 final _member = <String, dynamic>{

@@ -47,7 +47,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
   }
 
-  testWidgets('home renders at 1.3x text scale without overflow', (tester) async {
+  testWidgets('home renders at 1.3x text scale without overflow', (
+    tester,
+  ) async {
     await pumpAt(tester, const HomeScreen());
     expect(tester.takeException(), isNull);
     expect(find.text('Seasonal specials'), findsOneWidget);

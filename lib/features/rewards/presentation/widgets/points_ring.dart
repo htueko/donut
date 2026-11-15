@@ -169,7 +169,8 @@ class TierLadder extends StatelessWidget {
         final width = constraints.maxWidth;
         final usable = width - node;
         final step = tiers.length <= 1 ? usable : usable / (tiers.length - 1);
-        final fillEnd = (currentIndex + fractionIntoTier.clamp(0.0, 1.0)) * step;
+        final fillEnd =
+            (currentIndex + fractionIntoTier.clamp(0.0, 1.0)) * step;
         return SizedBox(
           height: node,
           child: Stack(
@@ -179,7 +180,10 @@ class TierLadder extends StatelessWidget {
                 left: node / 2,
                 right: width - node / 2,
                 top: (node - trackHeight) / 2,
-                child: Container(height: trackHeight, color: AppColors.hairline),
+                child: Container(
+                  height: trackHeight,
+                  color: AppColors.hairline,
+                ),
               ),
               Positioned(
                 left: node / 2,
@@ -233,7 +237,10 @@ class _TierNode extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: reached ? color : AppColors.paper,
-        border: Border.all(color: reached ? color : AppColors.hairline, width: 2),
+        border: Border.all(
+          color: reached ? color : AppColors.hairline,
+          width: 2,
+        ),
         boxShadow: current
             ? [
                 BoxShadow(

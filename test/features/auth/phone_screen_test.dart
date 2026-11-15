@@ -25,10 +25,13 @@ void main() {
   }
 
   bool continueEnabled(WidgetTester tester) {
-    return tester.widget<FilledButton>(find.byType(FilledButton)).enabled == true;
+    return tester.widget<FilledButton>(find.byType(FilledButton)).enabled ==
+        true;
   }
 
-  testWidgets('continue stays disabled until the number is valid', (tester) async {
+  testWidgets('continue stays disabled until the number is valid', (
+    tester,
+  ) async {
     await pumpPhone(tester);
     expect(continueEnabled(tester), isFalse);
 
@@ -45,7 +48,9 @@ void main() {
     expect(continueEnabled(tester), isTrue);
   });
 
-  testWidgets('shows the inline error after the field loses focus', (tester) async {
+  testWidgets('shows the inline error after the field loses focus', (
+    tester,
+  ) async {
     await pumpPhone(tester);
 
     await tester.enterText(find.byType(TextField), '0123');

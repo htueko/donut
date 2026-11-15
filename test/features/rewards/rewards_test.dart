@@ -39,16 +39,17 @@ void main() {
     }
   }
 
-  testWidgets('shows member points and both challenge cards from the database', (
-    tester,
-  ) async {
-    await pumpRewards(tester);
+  testWidgets(
+    'shows member points and both challenge cards from the database',
+    (tester) async {
+      await pumpRewards(tester);
 
-    expect(find.text('680,000'), findsOneWidget);
-    expect(find.text('Su Su Hlaing'), findsOneWidget);
-    expect(find.text('Eat 4 donuts this week'), findsOneWidget);
-    expect(find.text('Collect 12 coffee stamps'), findsOneWidget);
-  });
+      expect(find.text('680,000'), findsOneWidget);
+      expect(find.text('Su Su Hlaing'), findsOneWidget);
+      expect(find.text('Eat 4 donuts this week'), findsOneWidget);
+      expect(find.text('Collect 12 coffee stamps'), findsOneWidget);
+    },
+  );
 
   testWidgets('only the completed challenge is earnable', (tester) async {
     await pumpRewards(tester);
@@ -99,7 +100,9 @@ void main() {
 
   testWidgets('gift panel renders its placeholder message', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(home: Scaffold(body: GiftPanel(message: 'Nothing here'))),
+      const MaterialApp(
+        home: Scaffold(body: GiftPanel(message: 'Nothing here')),
+      ),
     );
     expect(find.text('Nothing here'), findsOneWidget);
   });
@@ -109,7 +112,13 @@ class _RecordingCanvas implements Canvas {
   int arcs = 0;
 
   @override
-  void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
+  void drawArc(
+    Rect rect,
+    double startAngle,
+    double sweepAngle,
+    bool useCenter,
+    Paint paint,
+  ) {
     arcs++;
   }
 

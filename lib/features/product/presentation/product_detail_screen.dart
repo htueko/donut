@@ -140,7 +140,8 @@ class _ProductDetail extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         Text(
           product.description.isEmpty
-              ? (AppLocalizations.of(context)?.emptyGeneric ?? 'Nothing here yet')
+              ? (AppLocalizations.of(context)?.emptyGeneric ??
+                    'Nothing here yet')
               : product.description,
           style: const TextStyle(
             color: AppColors.cocoa,
@@ -156,10 +157,7 @@ class _ProductDetail extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Spacer(),
-            QuantityStepper(
-              quantity: quantity,
-              onChanged: onQuantityChanged,
-            ),
+            QuantityStepper(quantity: quantity, onChanged: onQuantityChanged),
           ],
         ),
         const SizedBox(height: AppSpacing.xl),

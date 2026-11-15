@@ -21,9 +21,8 @@ Future<void> useDiskAssets() async {
         continue;
       }
       final bytes = await entity.readAsBytes();
-      await File('${target.path}/${entity.uri.pathSegments.last}').writeAsBytes(
-        bytes,
-      );
+      await File('${target.path}/${entity.uri.pathSegments.last}')
+          .writeAsBytes(bytes);
     }
     PaintingBinding.instance.imageCache.clear();
   });

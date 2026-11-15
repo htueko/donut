@@ -7,11 +7,7 @@ import '../../../../core/widgets/feedback_views.dart';
 
 /// Two-tab switch whose pill slides between labels and whose list cross-fades.
 class RewardTabs extends StatefulWidget {
-  const RewardTabs({
-    required this.labels,
-    required this.builders,
-    super.key,
-  });
+  const RewardTabs({required this.labels, required this.builders, super.key});
 
   final List<String> labels;
   final List<WidgetBuilder> builders;
@@ -63,11 +59,7 @@ class _RewardTabsState extends State<RewardTabs>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _PillBar(
-          labels: widget.labels,
-          selected: _index,
-          onSelected: _select,
-        ),
+        _PillBar(labels: widget.labels, selected: _index, onSelected: _select),
         const SizedBox(height: AppSpacing.lg),
         AnimatedSize(
           duration: motionScale(context, AppMotion.base),
@@ -134,7 +126,9 @@ class _PillBar extends StatelessWidget {
                   for (var i = 0; i < labels.length; i++)
                     Expanded(
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.radiusPill,
+                        ),
                         onTap: () => onSelected(i),
                         child: Center(
                           child: AnimatedDefaultTextStyle(

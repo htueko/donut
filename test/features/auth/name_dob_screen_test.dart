@@ -37,9 +37,7 @@ void main() {
   }
 
   bool continueEnabled(WidgetTester tester) {
-    return tester
-        .widget<PrimaryButton>(find.byType(PrimaryButton))
-        .enabled;
+    return tester.widget<PrimaryButton>(find.byType(PrimaryButton)).enabled;
   }
 
   testWidgets('name step rejects empty input and digits', (tester) async {

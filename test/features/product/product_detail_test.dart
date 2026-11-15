@@ -23,13 +23,14 @@ void main() {
     await db.close();
   });
 
-  Future<void> pumpScreen(WidgetTester tester, {String id = 'p_coconut'}) async {
+  Future<void> pumpScreen(
+    WidgetTester tester, {
+    String id = 'p_coconut',
+  }) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [catalogDatabaseProvider.overrideWithValue(db)],
-        child: MaterialApp(
-          home: ProductDetailScreen(productId: id),
-        ),
+        child: MaterialApp(home: ProductDetailScreen(productId: id)),
       ),
     );
     await tester.pumpAndSettle();
@@ -95,7 +96,9 @@ void main() {
     expect(find.text('1 added to cart'), findsOneWidget);
   });
 
-  testWidgets('shows a not-found state for an unknown product id', (tester) async {
+  testWidgets('shows a not-found state for an unknown product id', (
+    tester,
+  ) async {
     await pumpScreen(tester, id: 'p_missing');
 
     expect(find.text('Not found'), findsOneWidget);

@@ -18,11 +18,7 @@ class DonutQuarterPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2 - _inset;
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()..color = AppColors.shimmerBase,
-    );
+    canvas.drawCircle(center, radius, Paint()..color = AppColors.shimmerBase);
 
     final quarters = fill.clamp(0.0, 1.0) * 4;
     final glaze = Paint()
