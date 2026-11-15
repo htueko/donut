@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/widgets/feedback_views.dart';
 import '../../../../core/widgets/shimmer_box.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../catalog/data/catalog_providers.dart';
@@ -17,7 +18,6 @@ import 'widgets/banner_carousel.dart';
 import 'widgets/member_avatar.dart';
 import 'widgets/product_row.dart';
 import 'widgets/shop_card.dart';
-import '../../../../core/widgets/feedback_views.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -87,7 +87,6 @@ class _MemberHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final progress = TierProgress(member.tier, member.points);
     final points = NumberFormat.decimalPattern('en').format(member.points);
     final toNext = NumberFormat.decimalPattern('en')
@@ -208,7 +207,7 @@ class _HomeSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               ShimmerBox(width: 44, height: 44, radius: 22),
               SizedBox(width: AppSpacing.md),
@@ -222,11 +221,11 @@ class _HomeSkeleton extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.lg),
-          ShimmerBox(height: 140, radius: 16),
-          SizedBox(height: AppSpacing.lg),
-          ShimmerBox(width: 160, height: 16),
-          SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.lg),
+          const ShimmerBox(height: 140, radius: 16),
+          const SizedBox(height: AppSpacing.lg),
+          const ShimmerBox(width: 160, height: 16),
+          const SizedBox(height: AppSpacing.md),
           const Row(
             children: [
               ProductTileSkeleton(),
@@ -236,15 +235,15 @@ class _HomeSkeleton extends StatelessWidget {
               ProductTileSkeleton(),
             ],
           ),
-          SizedBox(height: AppSpacing.lg),
-          ShimmerBox(width: 120, height: 16),
-          SizedBox(height: AppSpacing.md),
-          const Row(
+          const SizedBox(height: AppSpacing.lg),
+          const ShimmerBox(width: 120, height: 16),
+          const SizedBox(height: AppSpacing.md),
+          Row(
             children: [
               ProductTileSkeleton(),
-              SizedBox(width: AppSpacing.md),
+              const SizedBox(width: AppSpacing.md),
               ProductTileSkeleton(),
-              SizedBox(width: AppSpacing.md),
+              const SizedBox(width: AppSpacing.md),
               ProductTileSkeleton(),
             ],
           ),
