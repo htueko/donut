@@ -17,6 +17,7 @@ import '../../catalog/domain/tier_progress.dart';
 import 'widgets/banner_carousel.dart';
 import 'widgets/member_avatar.dart';
 import 'widgets/product_row.dart';
+import 'widgets/product_tile.dart';
 import 'widgets/shop_card.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -241,28 +242,31 @@ class _HomeSkeleton extends StatelessWidget {
           SizedBox(height: AppSpacing.lg),
           ShimmerBox(width: 160, height: 16),
           SizedBox(height: AppSpacing.md),
-          Row(
-            children: [
-              ProductTileSkeleton(),
-              SizedBox(width: AppSpacing.md),
-              ProductTileSkeleton(),
-              SizedBox(width: AppSpacing.md),
-              ProductTileSkeleton(),
-            ],
-          ),
+          _SkeletonStrip(),
           SizedBox(height: AppSpacing.lg),
           ShimmerBox(width: 120, height: 16),
           SizedBox(height: AppSpacing.md),
-          Row(
-            children: [
-              ProductTileSkeleton(),
-              SizedBox(width: AppSpacing.md),
-              ProductTileSkeleton(),
-              SizedBox(width: AppSpacing.md),
-              ProductTileSkeleton(),
-            ],
-          ),
+          _SkeletonStrip(),
         ],
+      ),
+    );
+  }
+}
+
+class _SkeletonStrip extends StatelessWidget {
+  const _SkeletonStrip();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: ProductTile.heightFor(context),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        itemCount: 3,
+        separatorBuilder: (context, _) => const SizedBox(width: AppSpacing.md),
+        itemBuilder: (context, _) => const ProductTileSkeleton(),
       ),
     );
   }

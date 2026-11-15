@@ -140,18 +140,21 @@ class PriceText extends StatelessWidget {
 class ProductTileSkeleton extends StatelessWidget {
   const ProductTileSkeleton({super.key});
 
+  static const double width = 148;
+
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      width: 148,
+    final scale = MediaQuery.textScalerOf(context).scale(1);
+    return SizedBox(
+      width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ShimmerBox(height: 104, radius: 16),
-          SizedBox(height: 8),
-          ShimmerBox(height: 14, width: 110),
-          SizedBox(height: 6),
-          ShimmerBox(height: 12, width: 70),
+          const ShimmerBox(height: 104, radius: 16),
+          const SizedBox(height: 8),
+          ShimmerBox(height: 14 * scale, width: 110),
+          const SizedBox(height: 6),
+          ShimmerBox(height: 12 * scale, width: 70),
         ],
       ),
     );

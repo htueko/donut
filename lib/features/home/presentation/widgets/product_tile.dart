@@ -11,6 +11,16 @@ class ProductTile extends StatelessWidget {
 
   final Product product;
 
+  /// Artwork is a fixed size; the text under it grows with the user's text
+  /// scale, so the row has to grow with it or the tiles clip.
+  static double heightFor(BuildContext context) {
+    final scaler = MediaQuery.textScalerOf(context);
+    // Image, gap, name line and price line: each text line grows with scale.
+    final name = scaler.scale(20);
+    final price = scaler.scale(18);
+    return AppSpacing.tileImage + AppSpacing.sm + name + 2 + price;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

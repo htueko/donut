@@ -29,7 +29,7 @@ class ProductRow extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         SizedBox(
-          height: AppSpacing.tileImage + 48,
+          height: ProductTile.heightFor(context),
           child: products.isEmpty
               ? Padding(
                   padding: const EdgeInsets.symmetric(
