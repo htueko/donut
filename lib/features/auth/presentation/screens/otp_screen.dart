@@ -14,6 +14,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/app_user.dart';
 import '../../domain/otp_validator.dart';
 import '../auth_flow_provider.dart';
+import '../widgets/otp_boxes.dart';
 import '../widgets/registration_progress_ring.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
@@ -265,7 +266,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                         );
                   return Transform.translate(offset: offset, child: child);
                 },
-                child: _OtpBoxes(
+                child: OtpBoxes(
                   controllers: _controllers,
                   nodes: _nodes,
                   enabled: !_locked,
@@ -322,124 +323,5 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
     final minutes = (_secondsLeft ~/ 60).toString().padLeft(2, '0');
     final seconds = (_secondsLeft % 60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
-  }
-}
-
-class _OtpBoxes extends StatelessWidget {
-  const _OtpBoxes({
-    required this.controllers,
-    required this.nodes,
-    required this.enabled,
-    required this.onChanged,
-  });
-
-  final List<TextEditingController> controllers;
-  final List<FocusNode> nodes;
-  final bool enabled;
-  final void Function(String value, int index) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        for (var i = 0; i < controllers.length; i++)
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: i == controllers.length - 1 ? 0 : AppSpacing.sm,
-              ),
-              child: _OtpBox(
-                controller: controllers[i],
-                node: nodes[i],
-                enabled: enabled,
-                onChanged: (value) => onChanged(value, i),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _OtpBox extends StatefulWidget {
-  const _OtpBox({
-    required this.controller,
-    required this.node,
-    required this.enabled,
-    required this.onChanged,
-  });
-
-  final TextEditingController controller;
-  final FocusNode node;
-  final bool enabled;
-  final ValueChanged<String> onChanged;
-
-  @override
-  State<_OtpBox> createState() => _OtpBoxState();
-}
-
-class _OtpBoxState extends State<_OtpBox> {
-  bool _focused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.node.addListener(_onFocus);
-  }
-
-  void _onFocus() {
-    if (mounted) {
-      setState(() => _focused = widget.node.hasFocus);
-    }
-  }
-
-  @override
-  void dispose() {
-    widget.node.removeListener(_onFocus);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      child: TextField(
-        controller: widget.controller,
-        focusNode: widget.node,
-        enabled: widget.enabled,
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        autofillHints: const [AutofillHints.oneTimeCode],
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-        decoration: InputDecoration(
-          counterText: '',
-          filled: true,
-          fillColor: AppColors.paper,
-          contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: BorderSide(
-              color: _focused ? AppColors.seed : AppColors.hairline,
-              width: _focused ? 1.5 : 1,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: const BorderSide(color: AppColors.hairline),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: const BorderSide(color: AppColors.seed, width: 1.5),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: const BorderSide(color: AppColors.hairline),
-          ),
-        ),
-        onChanged: widget.onChanged,
-      ),
-    );
   }
 }

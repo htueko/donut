@@ -2,7 +2,7 @@ import 'package:donut/features/catalog/data/catalog_providers.dart';
 import 'package:donut/features/catalog/data/local/catalog_database.dart'
     hide Banner, Challenge, Member, Product, Shop;
 import 'package:donut/features/rewards/presentation/rewards_screen.dart';
-import 'package:donut/features/rewards/presentation/widgets/challenge_card.dart';
+import 'package:donut/features/rewards/presentation/widgets/challenge_painters.dart';
 import 'package:donut/features/rewards/presentation/widgets/points_ring.dart';
 import 'package:donut/features/rewards/presentation/widgets/reward_tabs.dart';
 import 'package:flutter/material.dart';
