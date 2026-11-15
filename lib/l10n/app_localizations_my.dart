@@ -9,188 +9,188 @@ class AppLocalizationsMy extends AppLocalizations {
   AppLocalizationsMy([String locale = 'my']) : super(locale);
 
   @override
-  String get appTitle => 'J\'Donuts';
+  String get appTitle => 'ဂျီဒိုနပ်စ်';
 
   @override
-  String get homeTab => 'Home';
+  String get homeTab => 'ပင်မ';
 
   @override
-  String get onboardingTitle => 'Round food for every mood';
+  String get onboardingTitle => 'နေ့တိုင်း စားလိုက်ရင် ပျော်စရာ';
 
   @override
-  String get getStarted => 'Let\'s get started';
+  String get getStarted => 'စတင်ရအောင်';
 
   @override
-  String get logIn => 'Log in';
+  String get logIn => 'အကောင့်ဝင်မယ်';
 
   @override
-  String get alreadyHaveAccount => 'Already have an account?';
+  String get alreadyHaveAccount => 'အကောင့် ရှိပြီးသား ဖြစ်လား?';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'ဆက်လုပ်မယ်';
 
   @override
-  String get phoneTitle => 'What\'s your phone number?';
+  String get phoneTitle => 'သင့်ဖုန်းနံပါတ် ဘယ်လောက်လဲ?';
 
   @override
-  String get phoneHint => 'Phone number';
+  String get phoneHint => 'ဖုန်းနံပါတ်';
 
   @override
-  String get phoneInvalid => 'Enter 9 followed by 7 to 9 digits after +95';
+  String get phoneInvalid => '+95 နောက်မှာ ၉ ဖြင့် စပြီး ဂဏန်း ၇ မှ ၉ လုံး ထည့်ပါ';
 
   @override
-  String get verifyTitle => 'Verify your number';
+  String get verifyTitle => 'သင့်နံပါတ်ကို အတည်ပြုပါ';
 
   @override
   String verifyHint(Object phone) {
-    return 'Enter the 6-digit code sent to $phone';
+    return '$phone သို့ ပို့ထားသော ဂဏန်း ၆ လုံးကို ထည့်ပါ';
   }
 
   @override
-  String get resend => 'Resend';
+  String get resend => 'ပြန်ပို့မယ်';
 
   @override
   String resendIn(Object time) {
-    return 'Resend in $time';
+    return '$time အတွင်း ပြန်ပို့မယ်';
   }
 
   @override
-  String get otpInvalid => 'That code doesn\'t look right. Try 123456.';
+  String get otpInvalid => 'ကုဒ် မမှန်ပါ။ ထပ်စမ်းကြည့်ပါ။';
 
   @override
-  String get otpLocked => 'Too many wrong tries. Tap Resend to get a new code.';
+  String get otpLocked => 'အလွန်အကျွံ မှားခဲ့ပါတယ်။ ကုဒ်အသစ် ရယူရန် ပြန်ပို့ကို နှိပ်ပါ။';
 
   @override
-  String get firstNameLabel => 'First name';
+  String get firstNameLabel => 'အမည် ပထမစကားလုံး';
 
   @override
-  String get lastNameLabel => 'Last name';
+  String get lastNameLabel => 'အမည် ဒုတိယစကားလုံး';
 
   @override
-  String get nameRequired => 'First name is required';
+  String get nameRequired => 'အမည် ပထမစကားလုံး လိုအပ်ပါတယ်';
 
   @override
-  String get nameInvalidChars => 'Letters and spaces only, no digits';
+  String get nameInvalidChars => 'စာလုံးများနှင့် ကွက်လပ်သာ ဖြစ်ရမည်';
 
   @override
-  String get nameTooLong => 'Use 50 characters or fewer';
+  String get nameTooLong => 'စာလုံး ၅၀ သို့မဟုတ် ထက်နည်းအောင် သုံးပါ';
 
   @override
-  String get dobTitle => 'When were you born?';
+  String get dobTitle => 'မွေးသက္ကရာဇ် ဘယ်နေ့လဲ?';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'ရက်စွဲ ရွေးပါ';
 
   @override
-  String get dobInvalid => 'Enter a real date';
+  String get dobInvalid => 'မှန်ကန်သော ရက်စွဲ ထည့်ပါ';
 
   @override
-  String get dobFuture => 'Date can\'t be in the future';
+  String get dobFuture => 'အနာဂတ်ရက်စွဲ မဖြစ်နိုင်ပါ';
 
   @override
   String dobTooYoung(Object age) {
-    return 'You must be at least $age years old';
+    return 'အသက် $age နှစ် ပြည့်မှ ဖြစ်မည်';
   }
 
   @override
-  String get welcomeTitle => 'Welcome to the world of J\'donuts';
+  String get welcomeTitle => 'ဂျီဒိုနပ်စ် ကမ္ဘာထဲ ကြိုဆိုပါတယ်';
 
   @override
-  String get letsExplore => 'Let\'s explore';
+  String get letsExplore => 'ရှာဖွေကြည့်ရအောင်';
 
   @override
-  String get seasonalSpecials => 'Seasonal specials';
+  String get seasonalSpecials => 'ရာသီအလိုက် အထူးများ';
 
   @override
-  String get popular => 'Popular';
+  String get popular => 'လူကြိုက်များ';
 
   @override
-  String get orderAgain => 'Order again';
+  String get orderAgain => 'ထပ်မှာမယ်';
 
   @override
   String nearbyShopsTitle(Object count) {
-    return 'There are $count J\'Donut shops near you';
+    return 'သင့်အနီးတွင် ဂျီဒိုနပ်ဆိုင် $count ဆိုင် ရှိပါတယ်';
   }
 
   @override
-  String get exploreNow => 'Explore now';
+  String get exploreNow => 'ယခု ကြည့်မယ်';
 
   @override
-  String get orderOnline => 'Order online';
+  String get orderOnline => 'အွန်လိုင်း မှာမယ်';
 
   @override
-  String get whatsThis => 'What\'s this?';
+  String get whatsThis => 'ဒါက ဘာလဲ?';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'စျေးခြင်းတောင်းထဲ ထည့်မယ်';
 
   @override
-  String get total => 'Total';
+  String get total => 'စုစုပေါင်း';
 
   @override
   String addedToCart(Object count) {
-    return '$count added to cart';
+    return '$count ခု ထည့်ပြီးပါပြီ';
   }
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'အရေအတွက်';
 
   @override
-  String get rewardsTitle => 'Rewards';
+  String get rewardsTitle => 'ဆုလက်ဆောင်များ';
 
   @override
-  String get eatMoreEarnMore => 'Eat more earn more';
+  String get eatMoreEarnMore => 'စားလေ ရလေ';
 
   @override
-  String get giftTab => 'Gift';
+  String get giftTab => 'လက်ဆောင်';
 
   @override
   String pointsToNextTier(Object points, Object tier) {
-    return '$points points to $tier';
+    return '$tier သို့ ရောက်ရန် $points မှတ်';
   }
 
   @override
-  String get challengeComplete => 'Done';
+  String get challengeComplete => 'ပြီးပါပြီ';
 
   @override
-  String get earn => 'Earn';
+  String get earn => 'ရယူမယ်';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'ဆက်တင်';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'မှာယူမှုများ';
 
   @override
-  String get cartTab => 'Cart';
+  String get cartTab => 'ခြင်းတောင်း';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'အသိပေးချက်များ';
 
   @override
-  String get logOut => 'Log out';
+  String get logOut => 'အကောင့်မှ ထွက်မယ်';
 
   @override
-  String get offline => 'You\'re offline';
+  String get offline => 'အင်တာနက် မရှိပါ';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'ထပ်ကြိုးစားမယ်';
 
   @override
-  String get errorGeneric => 'Something went wrong';
+  String get errorGeneric => 'တစ်ခုခု မှားနေပါတယ်';
 
   @override
-  String get emptyGeneric => 'Nothing here yet';
+  String get emptyGeneric => 'ဘာမှ မရှိသေးပါ';
 
   @override
-  String get notFound => 'Not found';
+  String get notFound => 'မတွေ့ပါ';
 
   @override
-  String get socialLoginComingSoon => 'Social sign-in is coming soon';
+  String get socialLoginComingSoon => 'လူမှုကွန်ရက် ဝင်ရောက်မှု မကြာမီ ရရှိမည်';
 
   @override
-  String get legalComingSoon => 'This link is not part of the demo';
+  String get legalComingSoon => 'ဤလင့်ခ်သည် သရုပ်ပြအတွက်သာ ဖြစ်သည်';
 
   @override
-  String get loggedOutMessage => 'You\'ve been logged out';
+  String get loggedOutMessage => 'အကောင့်မှ ထွက်ပြီးပါပြီ';
 }
