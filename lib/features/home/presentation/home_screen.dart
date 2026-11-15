@@ -202,7 +202,7 @@ class _HomeSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
