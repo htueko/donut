@@ -32,9 +32,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   );
 
   @override
-  void initState() {
-    super.initState();
-    _controller.forward();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    animateOnce(_controller, context);
   }
 
   @override

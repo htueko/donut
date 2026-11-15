@@ -42,9 +42,16 @@ class ProductTile extends StatelessWidget {
             const SizedBox(height: 2),
             Row(
               children: [
-                Text(
-                  '${_formatPrice(product.priceMmk)} MMK',
-                  style: const TextStyle(color: AppColors.cocoa, fontSize: 12),
+                Flexible(
+                  child: Text(
+                    '${_formatPrice(product.priceMmk)} MMK',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.cocoa,
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
                 if (product.discountPercent != null) ...[
                   const SizedBox(width: AppSpacing.xs),

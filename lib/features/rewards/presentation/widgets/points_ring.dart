@@ -56,12 +56,16 @@ class _PointsRingState extends State<PointsRing>
     return AnimatedBuilder(
       animation: Listenable.merge([_sweep, _controller]),
       builder: (context, _) {
-        final progress = motionValue(_sweep, context, fallback: widget.progress);
-        final points = (widget.total * progress).round();
+        // One 0→1 timeline drives both the arc and the count-up, so the ring
+        // ends at the member's tier progress while the number lands on the
+        // full point total.
+        final t = motionValue(_sweep, context);
+        final sweep = widget.progress * t;
+        final points = (widget.total * t).round();
         return SizedBox.square(
           dimension: widget.size,
           child: CustomPaint(
-            painter: PointsRingPainter(progress: progress, active: AppColors.seed),
+            painter: PointsRingPainter(progress: sweep, active: AppColors.seed),
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

@@ -44,8 +44,15 @@ class CatalogSync {
       );
       return const Success(null);
     } on Object catch (error) {
-      return FailureResult(NetworkFailure('$error'));
+      return FailureResult(_failureFor(error));
     }
+  }
+
+  Failure _failureFor(Object error) {
+    if (error is DioException) {
+      return NetworkFailure(error.message ?? 'Request failed');
+    }
+    return CacheFailure('$error');
   }
 
   Future<List<Map<String, dynamic>>> _getList(String path) async {
@@ -55,7 +62,7 @@ class CatalogSync {
     );
     final data = response.data?['data'];
     if (data is! List) {
-      return const [];
+      throw const FormatException('expected a list in the data envelope');
     }
     return data.whereType<Map<String, dynamic>>().toList(growable: false);
   }
@@ -67,7 +74,7 @@ class CatalogSync {
     );
     final data = response.data?['data'];
     if (data is! Map<String, dynamic>) {
-      return null;
+      throw const FormatException('expected an object in the data envelope');
     }
     return Member.fromJson(data);
   }
