@@ -2,12 +2,14 @@ import '../../../core/result.dart';
 import '../domain/catalog_data.dart';
 import '../domain/catalog_repository.dart';
 import '../domain/product.dart';
+import 'catalog_sync.dart';
 import 'local/catalog_database.dart' as local;
 
 class CatalogRepositoryImpl implements CatalogRepository {
-  CatalogRepositoryImpl(this._db);
+  CatalogRepositoryImpl(this._db, {this.sync});
 
   final local.CatalogDatabase _db;
+  final CatalogSync? sync;
 
   @override
   Stream<CatalogData> watchCatalog() => _db.catalogDao.watchCatalog();
@@ -27,6 +29,10 @@ class CatalogRepositoryImpl implements CatalogRepository {
 
   @override
   Future<Result<void>> refresh() async {
-    return const Success(null);
+    final catalogSync = sync;
+    if (catalogSync == null) {
+      return const Success(null);
+    }
+    return catalogSync.refresh();
   }
 }

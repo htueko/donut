@@ -25,57 +25,72 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(catalogDataProvider);
+    final online = ref.watch(onlineStatusProvider).valueOrNull ?? true;
     return Scaffold(
-      body: catalog.when(
-        data: (data) => _HomeContent(data: data),
-        loading: () => const _HomeSkeleton(),
-        error: (error, _) => ErrorRetryView(
-          message:
-              AppLocalizations.of(context)?.errorGeneric ??
-              'Something went wrong',
-          onRetry: () => ref.refresh(catalogDataProvider),
-        ),
+      body: Column(
+        children: [
+          if (!online)
+            OfflineBanner(
+              message:
+                  AppLocalizations.of(context)?.offline ?? 'You\'re offline',
+            ),
+          Expanded(
+            child: catalog.when(
+              data: (data) => _HomeContent(data: data),
+              loading: () => const _HomeSkeleton(),
+              error: (error, _) => ErrorRetryView(
+                message:
+                    AppLocalizations.of(context)?.errorGeneric ??
+                    'Something went wrong',
+                onRetry: () => ref.refresh(catalogDataProvider),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _HomeContent extends StatelessWidget {
+class _HomeContent extends ConsumerWidget {
   const _HomeContent({required this.data});
 
   final CatalogData data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final member = data.member;
-    return ListView(
-      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-      children: [
-        if (member != null) _MemberHeader(member: member),
-        const SizedBox(height: AppSpacing.md),
-        if (data.banners.isNotEmpty) BannerCarousel(banners: data.banners),
-        const SizedBox(height: AppSpacing.lg),
-        ProductRow(
-          title: l10n?.seasonalSpecials ?? 'Seasonal specials',
-          products: data.productsInSection(CatalogSection.seasonal),
-          emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        ProductRow(
-          title: l10n?.popular ?? 'Popular',
-          products: data.productsInSection(CatalogSection.popular),
-          emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        ProductRow(
-          title: l10n?.orderAgain ?? 'Order again',
-          products: data.productsInSection(CatalogSection.orderAgain),
-          emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        _NearbyShops(shops: data.shops),
-      ],
+    return RefreshIndicator(
+      onRefresh: () => ref.read(catalogRepositoryProvider).refresh(),
+      child: ListView(
+        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+        children: [
+          if (member != null) _MemberHeader(member: member),
+          const SizedBox(height: AppSpacing.md),
+          if (data.banners.isNotEmpty) BannerCarousel(banners: data.banners),
+          const SizedBox(height: AppSpacing.lg),
+          ProductRow(
+            title: l10n?.seasonalSpecials ?? 'Seasonal specials',
+            products: data.productsInSection(CatalogSection.seasonal),
+            emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          ProductRow(
+            title: l10n?.popular ?? 'Popular',
+            products: data.productsInSection(CatalogSection.popular),
+            emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          ProductRow(
+            title: l10n?.orderAgain ?? 'Order again',
+            products: data.productsInSection(CatalogSection.orderAgain),
+            emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          _NearbyShops(shops: data.shops),
+        ],
+      ),
     );
   }
 }
