@@ -8,6 +8,7 @@ environment:
   sdk: ^3.13.4
 
 dependencies:
+  async: ^2.11.0
   cached_network_image: ^3.4.0
   connectivity_plus: ^6.0.3
   cupertino_icons: ^1.0.8
