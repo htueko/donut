@@ -160,8 +160,8 @@ class _NearbyShops extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SectionHeader(
             title:
-                (l10n?.nearbyShopsTitle(shops.length) ??
-                'There are ${shops.length} J\'Donut shops near you'),
+                l10n?.nearbyShopsTitle(shops.length) ??
+                'There are ${shops.length} J\'Donut shops near you',
           ),
         ),
         const SizedBox(height: AppSpacing.md),
@@ -204,7 +204,7 @@ class _HomeSkeleton extends StatelessWidget {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
