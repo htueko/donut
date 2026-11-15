@@ -3,7 +3,6 @@ import 'package:donut/features/auth/data/auth_repository_impl.dart';
 import 'package:donut/features/auth/data/fake_auth_remote_data_source.dart';
 import 'package:donut/features/auth/data/local/auth_dao.dart';
 import 'package:donut/features/auth/data/session_store.dart';
-import 'package:donut/features/auth/domain/app_user.dart';
 import 'package:donut/features/catalog/data/local/catalog_database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
