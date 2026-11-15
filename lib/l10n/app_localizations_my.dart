@@ -13,6 +13,9 @@ class AppLocalizationsMy extends AppLocalizations {
   String get appTitle => 'J\'Donuts';
 
   @override
+  String get homeTab => 'Home';
+
+  @override
   String get onboardingTitle => 'Round food for every mood';
 
   @override
