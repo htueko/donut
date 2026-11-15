@@ -34,6 +34,8 @@
   "orderOnline": "Order online",
   "whatsThis": "What's this?",
   "addToCart": "Add to cart",
+  "total": "Total",
+  "addedToCart": "{count} added to cart",
   "quantity": "Quantity",
   "rewardsTitle": "Rewards",
   "eatMoreEarnMore": "Eat more earn more",

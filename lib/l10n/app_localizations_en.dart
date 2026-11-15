@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -121,6 +120,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addToCart => 'Add to cart';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String addedToCart(Object count) {
+    return '$count added to cart';
+  }
 
   @override
   String get quantity => 'Quantity';
