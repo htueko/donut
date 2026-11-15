@@ -28,12 +28,15 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   );
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     if (!MediaQuery.disableAnimationsOf(context)) {
       _drift.repeat();
+    } else {
+      _drift.stop();
+      _drift.value = 1;
     }
-    _entrance.forward();
+    _entrance.forward(from: 0);
   }
 
   @override

@@ -79,6 +79,9 @@ class AppLocalizationsMy extends AppLocalizations {
   String get dobTitle => 'When were you born?';
 
   @override
+  String get selectDate => 'Select date';
+
+  @override
   String get dobInvalid => 'Enter a real date';
 
   @override

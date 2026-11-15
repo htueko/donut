@@ -9,7 +9,16 @@ import 'product_image.dart';
 class ShopCard extends StatelessWidget {
   const ShopCard({required this.shop, super.key});
 
+  static const double imageSize = 110;
+  static const double _baseHeight = 204;
+
   final Shop shop;
+
+  /// Height the horizontal shop list needs for this text scale. Text grows but
+  /// the artwork does not, so only the text-heavy rows need extra room.
+  static double heightFor(BuildContext context) {
+    return _baseHeight * MediaQuery.textScalerOf(context).scale(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +28,7 @@ class ShopCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProductImage(imageUrl: shop.imageUrl, size: 110),
+          ProductImage(imageUrl: shop.imageUrl, size: imageSize),
           const SizedBox(height: AppSpacing.sm),
           Text(
             shop.name,

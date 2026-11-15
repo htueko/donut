@@ -227,6 +227,12 @@ abstract class AppLocalizations {
   /// **'When were you born?'**
   String get dobTitle;
 
+  /// No description provided for @selectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date'**
+  String get selectDate;
+
   /// No description provided for @dobInvalid.
   ///
   /// In en, this message translates to:

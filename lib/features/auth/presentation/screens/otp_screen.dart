@@ -49,12 +49,14 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
   @override
   void initState() {
     super.initState();
+    HardwareKeyboard.instance.addHandler(_handleKey);
     _startCountdown();
   }
 
   @override
   void dispose() {
     _countdown?.cancel();
+    HardwareKeyboard.instance.removeHandler(_handleKey);
     _shake.dispose();
     for (final controller in _controllers) {
       controller.dispose();
@@ -107,10 +109,20 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
     setState(() {});
   }
 
-  void _onBackspace(int index) {
-    if (_controllers[index].text.isEmpty && index > 0) {
-      _nodes[index - 1].requestFocus();
+  /// Backspace on an empty box moves focus back. EditableText consumes the key
+  /// before it reaches any ancestor, so listen on the hardware keyboard.
+  bool _handleKey(KeyEvent event) {
+    if (event is! KeyDownEvent ||
+        event.logicalKey != LogicalKeyboardKey.backspace) {
+      return false;
     }
+    for (var i = 0; i < _nodes.length; i++) {
+      if (_nodes[i].hasFocus && _controllers[i].text.isEmpty && i > 0) {
+        _nodes[i - 1].requestFocus();
+        return true;
+      }
+    }
+    return false;
   }
 
   Future<void> _submit() async {
@@ -258,7 +270,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                   nodes: _nodes,
                   enabled: !_locked,
                   onChanged: _onChanged,
-                  onBackspace: _onBackspace,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -320,14 +331,12 @@ class _OtpBoxes extends StatelessWidget {
     required this.nodes,
     required this.enabled,
     required this.onChanged,
-    required this.onBackspace,
   });
 
   final List<TextEditingController> controllers;
   final List<FocusNode> nodes;
   final bool enabled;
   final void Function(String value, int index) onChanged;
-  final void Function(int index) onBackspace;
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +354,6 @@ class _OtpBoxes extends StatelessWidget {
                 node: nodes[i],
                 enabled: enabled,
                 onChanged: (value) => onChanged(value, i),
-                onBackspace: () => onBackspace(i),
               ),
             ),
           ),
@@ -360,14 +368,12 @@ class _OtpBox extends StatefulWidget {
     required this.node,
     required this.enabled,
     required this.onChanged,
-    required this.onBackspace,
   });
 
   final TextEditingController controller;
   final FocusNode node;
   final bool enabled;
   final ValueChanged<String> onChanged;
-  final VoidCallback onBackspace;
 
   @override
   State<_OtpBox> createState() => _OtpBoxState();
@@ -398,54 +404,41 @@ class _OtpBoxState extends State<_OtpBox> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 52,
-      child: Focus(
+      child: TextField(
+        controller: widget.controller,
         focusNode: widget.node,
-        skipTraversal: true,
-        onKeyEvent: (node, event) {
-          if (event is KeyDownEvent &&
-              event.logicalKey == LogicalKeyboardKey.backspace &&
-              widget.controller.text.isEmpty) {
-            widget.onBackspace();
-            return KeyEventResult.handled;
-          }
-          return KeyEventResult.ignored;
-        },
-        child: TextField(
-          controller: widget.controller,
-          focusNode: widget.node,
-          enabled: widget.enabled,
-          keyboardType: TextInputType.number,
-          textAlign: TextAlign.center,
-          autofillHints: const [AutofillHints.oneTimeCode],
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          decoration: InputDecoration(
-            counterText: '',
-            filled: true,
-            fillColor: _focused ? AppColors.paper : AppColors.paper,
-            contentPadding: EdgeInsets.zero,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              borderSide: BorderSide(
-                color: _focused ? AppColors.seed : AppColors.hairline,
-                width: _focused ? 1.5 : 1,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              borderSide: const BorderSide(color: AppColors.hairline),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              borderSide: const BorderSide(color: AppColors.seed, width: 1.5),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              borderSide: const BorderSide(color: AppColors.hairline),
+        enabled: widget.enabled,
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        autofillHints: const [AutofillHints.oneTimeCode],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+        decoration: InputDecoration(
+          counterText: '',
+          filled: true,
+          fillColor: AppColors.paper,
+          contentPadding: EdgeInsets.zero,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            borderSide: BorderSide(
+              color: _focused ? AppColors.seed : AppColors.hairline,
+              width: _focused ? 1.5 : 1,
             ),
           ),
-          onChanged: widget.onChanged,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            borderSide: const BorderSide(color: AppColors.hairline),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            borderSide: const BorderSide(color: AppColors.seed, width: 1.5),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            borderSide: const BorderSide(color: AppColors.hairline),
+          ),
         ),
+        onChanged: widget.onChanged,
       ),
     );
   }

@@ -131,7 +131,7 @@ class _DobScreenState extends ConsumerState<DobScreen> {
                       Expanded(
                         child: Text(
                           _date == null
-                              ? (l10n?.dobTitle ?? 'Select date')
+                              ? (l10n?.selectDate ?? 'Select date')
                               : DateFormat.yMMMd().format(_date!),
                           style: Theme.of(context).textTheme.titleMedium,
                         ),

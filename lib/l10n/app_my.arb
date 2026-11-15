@@ -21,6 +21,7 @@
   "nameInvalidChars": "Letters and spaces only, no digits",
   "nameTooLong": "Use 50 characters or fewer",
   "dobTitle": "When were you born?",
+  "selectDate": "Select date",
   "dobInvalid": "Enter a real date",
   "dobFuture": "Date can't be in the future",
   "dobTooYoung": "You must be at least {age} years old",
@@ -53,5 +54,7 @@
   "notFound": "Not found",
   "socialLoginComingSoon": "Social sign-in is coming soon",
   "legalComingSoon": "This link is not part of the demo",
-  "loggedOutMessage": "You've been logged out"
+  "loggedOutMessage": "You've been logged out",
+  "total": "Total",
+  "addedToCart": "{count} added to cart"
 }

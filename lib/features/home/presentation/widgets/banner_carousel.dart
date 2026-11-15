@@ -23,8 +23,8 @@ class _BannerCarouselState extends State<BannerCarousel> {
   int _page = 0;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _startAutoPlay();
   }
 
@@ -32,7 +32,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
   void didUpdateWidget(BannerCarousel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.banners.length != widget.banners.length) {
-      _restartAutoPlay();
+      _startAutoPlay();
     }
   }
 
@@ -52,11 +52,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
         curve: AppMotion.standard,
       );
     });
-  }
-
-  void _restartAutoPlay() {
-    _timer?.cancel();
-    _startAutoPlay();
   }
 
   @override

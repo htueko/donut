@@ -181,7 +181,7 @@ class _NearbyShops extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         SizedBox(
-          height: 196,
+          height: ShopCard.heightFor(context),
           child: shops.isEmpty
               ? Align(
                   alignment: Alignment.centerLeft,
