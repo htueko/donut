@@ -48,16 +48,16 @@ abstract final class DobValidator {
 
   static ValidationResult validate(DateTime? date, {DateTime? now}) {
     if (date == null) {
-      return ValidationResult.invalid('dobInvalid');
+      return const ValidationResult.invalid('dobInvalid');
     }
     final today = now ?? DateTime.now();
     final normalizedNow = DateTime(today.year, today.month, today.day);
     if (date.isAfter(normalizedNow)) {
-      return ValidationResult.invalid('dobFuture');
+      return const ValidationResult.invalid('dobFuture');
     }
     if (ageOn(date, normalizedNow) < minimumAge) {
-      return ValidationResult.invalid('dobTooYoung');
+      return const ValidationResult.invalid('dobTooYoung');
     }
-    return ValidationResult.valid();
+    return const ValidationResult.valid();
   }
 }

@@ -20,6 +20,6 @@ abstract final class PhoneValidator {
     if (normalize(raw) == null) {
       return ValidationResult.invalid('phoneInvalid');
     }
-    return ValidationResult.valid();
+    return const ValidationResult.valid();
   }
 }

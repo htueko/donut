@@ -12,15 +12,15 @@ abstract final class NameValidator {
     final trimmed = raw.trim();
     if (trimmed.isEmpty) {
       return required
-          ? ValidationResult.invalid('nameRequired')
+          ? const ValidationResult.invalid('nameRequired')
           : ValidationResult.valid();
     }
     if (trimmed.length > maxLength) {
-      return ValidationResult.invalid('nameTooLong');
+      return const ValidationResult.invalid('nameTooLong');
     }
     if (_hasDigit.hasMatch(trimmed) || !_lettersOrSpaces.hasMatch(trimmed)) {
-      return ValidationResult.invalid('nameInvalidChars');
+      return const ValidationResult.invalid('nameInvalidChars');
     }
-    return ValidationResult.valid();
+    return const ValidationResult.valid();
   }
 }
