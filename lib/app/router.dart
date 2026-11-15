@@ -33,7 +33,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final sessionRefresh = _SessionRefresh(ref);
   ref.onDispose(sessionRefresh.dispose);
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/onboarding',
     refreshListenable: sessionRefresh,
     redirect: (context, state) {
       final user = ref.read(sessionControllerProvider);
