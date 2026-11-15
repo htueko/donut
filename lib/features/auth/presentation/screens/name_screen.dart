@@ -7,7 +7,7 @@ class NameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: Text('Name (C11)')),
+      body: const Center(child: Text('Name (C11)')),
     );
   }
 }

@@ -15,9 +15,7 @@ final initialSessionUserProvider = Provider<AppUser?>((ref) => null);
 class SessionController extends StateNotifier<AppUser?> {
   SessionController(super.initial);
 
-  void signIn(AppUser user) => state = user;
-
-  void signOut() => state = null;
+  set currentAppUser(AppUser? user) => state = user;
 }
 
 final sessionControllerProvider =
@@ -44,7 +42,8 @@ class AuthFlow {
   }) async {
     final result = await _login(phoneE164: phoneE164, otp: otp);
     result.when(
-      onSuccess: _ref.read(sessionControllerProvider.notifier).signIn,
+      onSuccess: (user) =>
+          _ref.read(sessionControllerProvider.notifier).currentAppUser = user,
       onFailure: (_) {},
     );
     return result;
@@ -59,7 +58,8 @@ class AuthFlow {
       dateOfBirth: draft.dateOfBirth!,
     );
     result.when(
-      onSuccess: _ref.read(sessionControllerProvider.notifier).signIn,
+      onSuccess: (user) =>
+          _ref.read(sessionControllerProvider.notifier).currentAppUser = user,
       onFailure: (_) {},
     );
     return result;
@@ -67,7 +67,7 @@ class AuthFlow {
 
   Future<Result<void>> logout() async {
     final result = await _logout();
-    _ref.read(sessionControllerProvider.notifier).signOut();
+    _ref.read(sessionControllerProvider.notifier).currentAppUser = null;
     return result;
   }
 }

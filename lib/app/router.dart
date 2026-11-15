@@ -22,7 +22,7 @@ class _SessionRefresh extends ChangeNotifier {
   _SessionRefresh(this._ref) {
     _ref.listen<int>(
       sessionControllerProvider.select((user) => user?.id.hashCode ?? 0),
-      (_, __) => notifyListeners(),
+      (_, _) => notifyListeners(),
     );
   }
 

@@ -186,17 +186,17 @@ class _Illustration extends StatelessWidget {
             Positioned(
               top: 40 + math.sin(t) * 10,
               left: 24 + math.cos(t) * 8,
-              child: _DonutBlob(color: AppColors.glaze, size: 88),
+              child: const _DonutBlob(color: AppColors.glaze, size: 88),
             ),
             Positioned(
               top: 120 + math.cos(t) * 12,
               right: 16 + math.sin(t) * 8,
-              child: _DonutBlob(color: AppColors.seed, size: 120),
+              child: const _DonutBlob(color: AppColors.seed, size: 120),
             ),
             Positioned(
               top: 220 + math.sin(t + 1) * 10,
               left: 60 + math.cos(t + 1) * 10,
-              child: _DonutBlob(color: AppColors.mint, size: 56),
+              child: const _DonutBlob(color: AppColors.mint, size: 56),
             ),
             Center(
               child: Image.asset(
