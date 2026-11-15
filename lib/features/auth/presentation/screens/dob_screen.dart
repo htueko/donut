@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
-import '../../../../core/result.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/result.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/dob_validator.dart';
