@@ -19,7 +19,6 @@ linter:
     - avoid_empty_else
     - avoid_print
     - avoid_relative_lib_imports
-    - avoid_returning_null_for_future
     - avoid_slow_async_io
     - avoid_type_to_string
     - avoid_types_as_parameter_names
@@ -50,7 +49,6 @@ linter:
     - non_constant_identifier_names
     - noop_primitive_operations
     - null_check_on_nullable_type_parameter
-    - null_checks
     - omit_local_variable_types
     - only_throw_errors
     - overridden_fields
@@ -107,7 +105,6 @@ linter:
     - unnecessary_late
     - unnecessary_new
     - unnecessary_null_aware_assignments
-    - unnecessary_null_checks
     - unnecessary_null_in_if_null_operators
     - unnecessary_nullable_for_final_variable_declarations
     - unnecessary_overrides
