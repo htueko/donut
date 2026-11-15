@@ -17,6 +17,16 @@ class AuthRepositoryImpl implements AuthRepository {
   final FakeAuthRemoteDataSource _remote;
 
   @override
+  Future<Result<void>> verifyOtp(String otp) async {
+    try {
+      await _remote.verifyOtp(otp);
+    } on AuthRequestException catch (error) {
+      return FailureResult(ValidationFailure(error.code));
+    }
+    return const Success(null);
+  }
+
+  @override
   Future<Result<AppUser>> login({
     required String phoneE164,
     required String otp,

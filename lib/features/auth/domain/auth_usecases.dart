@@ -2,6 +2,14 @@ import '../../../core/result.dart';
 import 'app_user.dart';
 import 'auth_repository.dart';
 
+class VerifyOtpUseCase {
+  const VerifyOtpUseCase(this._repository);
+
+  final AuthRepository _repository;
+
+  Future<Result<void>> call(String otp) => _repository.verifyOtp(otp);
+}
+
 class LoginUseCase {
   const LoginUseCase(this._repository);
 

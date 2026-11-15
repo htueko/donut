@@ -35,8 +35,13 @@ class AuthFlow {
   RegisterUseCase get _register =>
       RegisterUseCase(_ref.watch(authRepositoryProvider));
 
+  VerifyOtpUseCase get _verifyOtp =>
+      VerifyOtpUseCase(_ref.watch(authRepositoryProvider));
+
   LogoutUseCase get _logout =>
       LogoutUseCase(_ref.watch(authRepositoryProvider));
+
+  Future<Result<void>> verifyOtp(String otp) => _verifyOtp(otp);
 
   Future<Result<AppUser>> login({
     required String phoneE164,

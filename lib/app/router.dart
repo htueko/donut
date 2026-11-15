@@ -46,7 +46,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (!loggedIn && !inAuthFlow) {
         return '/onboarding';
       }
-      if (loggedIn && inAuthFlow) {
+      if (loggedIn && inAuthFlow && location != '/welcome') {
         return '/home';
       }
       return null;
