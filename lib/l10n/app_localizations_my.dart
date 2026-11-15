@@ -196,4 +196,84 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get loggedOutMessage => 'အကောင့်မှ ထွက်ပြီးပါပြီ';
+
+  @override
+  String get language => 'ဘာသာစကား';
+
+  @override
+  String get theme => 'အပြင်အဆင်';
+
+  @override
+  String get darkTheme => 'မှောင်သော';
+
+  @override
+  String get lightTheme => 'အလင်း';
+
+  @override
+  String get systemTheme => 'စနစ်';
+
+  @override
+  String get english => 'အင်္ဂလိပ်';
+
+  @override
+  String get myanmar => 'မြန်မာ';
+
+  @override
+  String get max => 'အများဆုံး';
+
+  @override
+  String get register => 'မှတ်ပုံတင်မည်';
+
+  @override
+  String get phoneNotRegistered => 'ဖုန်းနံပါတ် မမှတ်ပုံတင်ရသေးပါ';
+
+  @override
+  String get points => 'မှတ်';
+
+  @override
+  String get newBadge => 'အသစ်';
+
+  @override
+  String get nameTitle => 'သင့်ကို ဘယ်လိုခေါ်ရမလဲ?';
+
+  @override
+  String get tierBronze => 'ကြေးဝါ';
+
+  @override
+  String get tierSilver => 'ငွေ';
+
+  @override
+  String get tierGold => 'ရွှေ';
+
+  @override
+  String get tierPlatinum => 'ပလက်တီနမ်';
+
+  @override
+  String get mmk => 'ကျပ်';
+
+  @override
+  String memberProgress(Object points, Object tier, Object toNext) {
+    return '$points မှတ် · $tier သို့ $toNext';
+  }
+
+  @override
+  String discountOff(Object percent) {
+    return '$percent% လျှော့စျေး';
+  }
+
+  @override
+  String productCode(Object code) {
+    return 'ကုဒ် $code';
+  }
+
+  @override
+  String get termsOfUse => 'အသုံးပြုမှု စည်းမျဉ်းများ';
+
+  @override
+  String get privacyPolicy => 'ကိုယ်ရေးအချက်အလက် မူဝါဒ';
+
+  @override
+  String challengeTapped(Object label) {
+    return '$label ကို နှိပ်ပြီး';
+  }
 }

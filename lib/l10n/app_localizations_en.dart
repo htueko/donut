@@ -194,4 +194,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loggedOutMessage => 'You\'ve been logged out';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get darkTheme => 'Dark';
+
+  @override
+  String get lightTheme => 'Light';
+
+  @override
+  String get systemTheme => 'System';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get myanmar => 'Myanmar';
+
+  @override
+  String get max => 'Max';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get phoneNotRegistered => 'Phone number not registered';
+
+  @override
+  String get points => 'points';
+
+  @override
+  String get newBadge => 'NEW';
+
+  @override
+  String get nameTitle => 'What should we call you?';
+
+  @override
+  String get tierBronze => 'Bronze';
+
+  @override
+  String get tierSilver => 'Silver';
+
+  @override
+  String get tierGold => 'Gold';
+
+  @override
+  String get tierPlatinum => 'Platinum';
+
+  @override
+  String get mmk => 'MMK';
+
+  @override
+  String memberProgress(Object points, Object tier, Object toNext) {
+    return '$points pts · $toNext to $tier';
+  }
+
+  @override
+  String discountOff(Object percent) {
+    return '$percent% off';
+  }
+
+  @override
+  String productCode(Object code) {
+    return 'Code $code';
+  }
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String challengeTapped(Object label) {
+    return '$label tapped';
+  }
 }
