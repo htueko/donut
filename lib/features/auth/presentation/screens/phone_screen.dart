@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_spacing.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/phone_validator.dart';
 import '../auth_flow_provider.dart';
 import '../widgets/registration_progress_ring.dart';
