@@ -173,7 +173,7 @@ class _EarnButtonState extends State<_EarnButton>
     with SingleTickerProviderStateMixin {
   late final AnimationController _pulse = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1100),
+    duration: AppMotion.attention,
   );
 
   @override

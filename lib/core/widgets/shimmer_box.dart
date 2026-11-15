@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../app/motion/app_motion.dart';
 import '../../app/theme/app_colors.dart';
 
 class ShimmerBox extends StatefulWidget {
@@ -24,7 +25,7 @@ class _ShimmerBoxState extends State<ShimmerBox>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1400),
+    duration: AppMotion.shimmer,
   )..repeat();
 
   @override

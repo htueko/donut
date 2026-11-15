@@ -9,6 +9,8 @@ class AppMotion {
   static const Duration slow = Duration(milliseconds: 450);
   static const Duration emphasis = Duration(milliseconds: 650);
   static const Duration ambient = Duration(seconds: 4);
+  static const Duration shimmer = Duration(milliseconds: 1400);
+  static const Duration attention = Duration(milliseconds: 1100);
 
   static const Curve standard = Curves.easeOutCubic;
   static const Curve decelerate = Curves.easeOut;
