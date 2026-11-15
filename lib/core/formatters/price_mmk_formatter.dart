@@ -1,9 +1,10 @@
-import 'package:intl/intl.dart';
+import 'decimal_formatter.dart';
 
+/// Formats [amount] for [locale], falling back to the ambient
+/// `Intl.defaultLocale` when [locale] is null. [unit] is the localized
+/// currency label so Burmese renders "ကျပ်" instead of "MMK".
 abstract final class PriceMmkFormatter {
-  static final NumberFormat _decimal = NumberFormat.decimalPattern('en');
-
-  static String format(int amount) {
-    return '${_decimal.format(amount)} MMK';
+  static String format(int amount, {String? locale, String unit = 'MMK'}) {
+    return '${DecimalFormatter.format(amount, locale: locale)} $unit';
   }
 }
