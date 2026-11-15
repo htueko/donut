@@ -35,8 +35,8 @@ class AppShell extends StatelessWidget {
             label: l10n?.homeTab ?? 'Home',
           ),
           NavigationDestination(
-            icon: const Icon(Icons.card_giftcard_outlined),
-            selectedIcon: const Icon(Icons.card_giftcard),
+            icon: const _RewardsTabIcon(selected: false),
+            selectedIcon: const _RewardsTabIcon(selected: true),
             label: l10n?.rewardsTitle ?? 'Rewards',
           ),
           NavigationDestination(
@@ -66,5 +66,24 @@ class AppShell extends StatelessWidget {
       }
     }
     return 0;
+  }
+}
+
+class _RewardsTabIcon extends StatelessWidget {
+  const _RewardsTabIcon({required this.selected});
+
+  static const int badgeCount = 3;
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Badge(
+      label: const Text('$badgeCount'),
+      backgroundColor: AppColors.seed,
+      child: Icon(
+        selected ? Icons.card_giftcard : Icons.card_giftcard_outlined,
+      ),
+    );
   }
 }

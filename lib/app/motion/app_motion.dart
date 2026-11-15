@@ -25,3 +25,39 @@ Duration motionScale(BuildContext context, Duration duration) {
   }
   return duration;
 }
+
+/// Fraction a controller has reached, or [fallback] when animations are off.
+double motionValue(
+  Animation<double> animation,
+  BuildContext context, {
+  double fallback = 1,
+}) {
+  if (MediaQuery.disableAnimationsOf(context)) {
+    return fallback;
+  }
+  return animation.value;
+}
+
+/// Drives a repeating [period] controller, but leaves it parked at the end when
+/// the user asks for reduced motion.
+void animateRepeat(
+  AnimationController controller,
+  BuildContext context, {
+  required Duration period,
+}) {
+  if (MediaQuery.disableAnimationsOf(context)) {
+    controller.value = 1;
+    return;
+  }
+  controller.repeat(period: period);
+}
+
+/// Plays [controller] once from zero, jumping straight to the end when the user
+/// asks for reduced motion.
+void animateOnce(AnimationController controller, BuildContext context) {
+  if (MediaQuery.disableAnimationsOf(context)) {
+    controller.value = 1;
+    return;
+  }
+  controller.forward(from: 0);
+}
