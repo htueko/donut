@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/motion/app_motion.dart';
 import '../../../app/theme/app_colors.dart';
+import '../../../app/theme/app_palette.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../core/formatters/decimal_formatter.dart';
 import '../../../core/widgets/feedback_views.dart';
 import '../../../core/widgets/shimmer_box.dart';
 import '../../../l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ import '../../catalog/domain/catalog_enums.dart';
 import '../../catalog/domain/challenge.dart';
 import '../../catalog/domain/member.dart';
 import '../../catalog/domain/tier_progress.dart';
+import '../../catalog/presentation/tier_label.dart';
 import '../../home/presentation/widgets/member_avatar.dart';
 import 'widgets/challenge_card.dart';
 import 'widgets/points_ring.dart';
@@ -82,12 +84,14 @@ class _PointsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final progress = TierProgress(member.tier, member.points);
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.paper,
+        color: palette.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-        border: Border.all(color: AppColors.hairline),
+        border: Border.all(color: palette.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +101,7 @@ class _PointsCard extends StatelessWidget {
               PointsRing(
                 progress: progress.fractionIntoTier,
                 total: member.points,
-                centerLabel: 'points',
+                centerLabel: l10n?.points ?? 'points',
               ),
               const SizedBox(width: AppSpacing.lg),
               Expanded(
@@ -106,34 +110,32 @@ class _PointsCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        MemberAvatar(imageUrl: member.photoUrl, size: 36),
+                        MemberAvatar(
+                          imageUrl: member.photoUrl,
+                          size: AppSpacing.avatarSmall,
+                        ),
                         const SizedBox(width: AppSpacing.sm),
                         Expanded(
                           child: Text(
                             member.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.chocolate,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(color: palette.textPrimary),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     TierBadge(
-                      tierLabel: member.tier.displayName,
+                      tierLabel: member.tier.localizedLabel(l10n),
                       color: AppColors.tierColor(member.tier.name),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
                       _pointsToNextLabel(context, progress),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.cocoa,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: palette.textSecondary),
                     ),
                   ],
                 ),
@@ -142,7 +144,7 @@ class _PointsCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           TierLadder(
-            tiers: const ['Silver', 'Gold', 'Platinum'],
+            tiers: const [Tier.silver, Tier.gold, Tier.platinum],
             currentIndex: _ladderIndex(member.tier),
             fractionIntoTier: progress.fractionIntoTier,
           ),
@@ -161,11 +163,13 @@ class _PointsCard extends StatelessWidget {
   }
 
   String _pointsToNextLabel(BuildContext context, TierProgress progress) {
-    final points = NumberFormat.decimalPattern('en')
-        .format(progress.pointsToNext);
-    final next = progress.nextTier?.displayName ?? 'max';
-    return AppLocalizations.of(context)?.pointsToNextTier(points, next) ??
-        '$points points to $next';
+    final l10n = AppLocalizations.of(context);
+    final points = DecimalFormatter.format(
+      progress.pointsToNext,
+      locale: Localizations.localeOf(context).toString(),
+    );
+    final next = progress.nextTier?.localizedLabel(l10n) ?? l10n?.max ?? 'max';
+    return l10n?.pointsToNextTier(points, next) ?? '$points points to $next';
   }
 }
 

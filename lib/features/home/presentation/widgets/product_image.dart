@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/shimmer_box.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ProductImage extends StatelessWidget {
   const ProductImage({
@@ -19,6 +21,7 @@ class ProductImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     final image = imageUrl.startsWith('assets/')
         ? Image.asset(
             imageUrl,
@@ -28,10 +31,13 @@ class ProductImage extends StatelessWidget {
         : CachedNetworkImage(
             imageUrl: imageUrl,
             fit: BoxFit.cover,
-            placeholder: (context, _) =>
-                const ShimmerBox(radius: AppSpacing.radiusMd),
+            placeholder: (context, _) => ShimmerBox(
+              width: size,
+              height: size,
+              radius: AppSpacing.radiusMd,
+            ),
             errorWidget: (context, _, _) =>
-                const ColoredBox(color: AppColors.shimmerBase),
+                ColoredBox(color: palette.shimmerBase),
           );
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
@@ -43,10 +49,12 @@ class ProductImage extends StatelessWidget {
           children: [
             image,
             if (isNew)
-              const Positioned(
+              Positioned(
                 top: AppSpacing.sm,
                 left: AppSpacing.sm,
-                child: _NewBadge(),
+                child: _NewBadge(
+                  label: AppLocalizations.of(context)?.newBadge ?? 'NEW',
+                ),
               ),
           ],
         ),
@@ -56,22 +64,27 @@ class ProductImage extends StatelessWidget {
 }
 
 class _NewBadge extends StatelessWidget {
-  const _NewBadge();
+  const _NewBadge({required this.label});
+
+  final String label;
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.badgeHorizontalPadding,
+        vertical: AppSpacing.badgeVerticalPadding,
+      ),
       decoration: BoxDecoration(
-        color: AppColors.seed,
+        color: palette.primary,
         borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
       ),
-      child: const Text(
-        'NEW',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 9,
-          fontWeight: FontWeight.w800,
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: palette.onPrimary,
+          fontWeight: AppTypography.buttonWeight,
         ),
       ),
     );

@@ -3,13 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../app/motion/app_motion.dart';
-import '../../app/theme/app_colors.dart';
+import '../../app/theme/app_palette.dart';
+import '../../app/theme/app_spacing.dart';
 
 class ShimmerBox extends StatefulWidget {
   const ShimmerBox({
     this.width = double.infinity,
     this.height = 16,
-    this.radius = 8,
+    this.radius = AppSpacing.radiusSm,
     super.key,
   });
 
@@ -43,15 +44,16 @@ class _ShimmerBoxState extends State<ShimmerBox>
       animation: _controller,
       builder: (context, _) {
         final t = math.sin(_controller.value * math.pi * 2) * 0.5 + 0.5;
-        return _box(gradient: _gradient(t));
+        return _box(gradient: _gradient(context, t));
       },
     );
   }
 
   Widget _box({Gradient? gradient}) {
+    final palette = context.palette;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.shimmerBase,
+        color: palette.shimmerBase,
         borderRadius: BorderRadius.circular(widget.radius),
         gradient: gradient,
       ),
@@ -59,13 +61,14 @@ class _ShimmerBoxState extends State<ShimmerBox>
     );
   }
 
-  Gradient _gradient(double t) {
+  Gradient _gradient(BuildContext context, double t) {
+    final palette = context.palette;
     final shift = (t - 0.5) * 1.4;
     return LinearGradient(
-      colors: const [
-        AppColors.shimmerBase,
-        AppColors.shimmerHighlight,
-        AppColors.shimmerBase,
+      colors: [
+        palette.shimmerBase,
+        palette.shimmerHighlight,
+        palette.shimmerBase,
       ],
       stops: [
         (0.35 + shift).clamp(0.0, 1.0),

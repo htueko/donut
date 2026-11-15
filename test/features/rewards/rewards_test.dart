@@ -11,6 +11,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/asset_loader.dart';
 
+// Painter fixtures: raw colors are fine here because the painters are handed
+// theme colors by the widgets that own them.
+const Color pink = Color(0xFFFF5398);
+const Color grey = Color(0xFFB5B8BD);
+const Color orange = Color(0xFFFF7E27);
+const Color yellow = Color(0xFFE5C158);
+const Color green = Color(0xFF74C69D);
+const Color white = Color(0xFFFFFFFF);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -84,9 +93,21 @@ void main() {
   });
 
   testWidgets('ring painter reports the swept fraction', (tester) async {
-    const painter = PointsRingPainter(progress: 0.5, active: Color(0xFFE5487A));
+    const painter = PointsRingPainter(
+      progress: 0.5,
+      active: pink,
+      track: grey,
+      mid: orange,
+      highlight: yellow,
+    );
     final repaint = painter.shouldRepaint(
-      const PointsRingPainter(progress: 0.4, active: Color(0xFFE5487A)),
+      const PointsRingPainter(
+        progress: 0.4,
+        active: pink,
+        track: grey,
+        mid: orange,
+        highlight: yellow,
+      ),
     );
     expect(repaint, isTrue);
   });
@@ -94,7 +115,15 @@ void main() {
   testWidgets('quarter painter fills one quarter per item', (tester) async {
     const size = Size(60, 60);
     final canvas = _RecordingCanvas();
-    const DonutQuarterPainter(fill: 0.25, complete: false).paint(canvas, size);
+    const DonutQuarterPainter(
+      fill: 0.25,
+      complete: false,
+      track: grey,
+      progress: pink,
+      success: green,
+      center: white,
+      onProgress: white,
+    ).paint(canvas, size);
     expect(canvas.arcs, 1);
   });
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
 
 class OtpBoxes extends StatelessWidget {
@@ -83,8 +83,9 @@ class _OtpBoxState extends State<OtpBox> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return SizedBox(
-      height: 52,
+      height: AppSpacing.otpBoxHeight,
       child: TextField(
         controller: widget.controller,
         focusNode: widget.node,
@@ -93,30 +94,38 @@ class _OtpBoxState extends State<OtpBox> {
         textAlign: TextAlign.center,
         autofillHints: const [AutofillHints.oneTimeCode],
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+          fontSize: AppSpacing.otpFontSize,
+          color: palette.textPrimary,
+        ),
         decoration: InputDecoration(
           counterText: '',
           filled: true,
-          fillColor: AppColors.paper,
+          fillColor: palette.surface,
           contentPadding: EdgeInsets.zero,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
             borderSide: BorderSide(
-              color: _focused ? AppColors.seed : AppColors.hairline,
-              width: _focused ? 1.5 : 1,
+              color: _focused ? palette.primary : palette.border,
+              width: _focused
+                  ? AppSpacing.focusWidth
+                  : AppSpacing.hairlineWidth,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: const BorderSide(color: AppColors.hairline),
+            borderSide: BorderSide(color: palette.border),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: const BorderSide(color: AppColors.seed, width: 1.5),
+            borderSide: BorderSide(
+              color: palette.primary,
+              width: AppSpacing.focusWidth,
+            ),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            borderSide: const BorderSide(color: AppColors.hairline),
+            borderSide: BorderSide(color: palette.border),
           ),
         ),
         onChanged: widget.onChanged,

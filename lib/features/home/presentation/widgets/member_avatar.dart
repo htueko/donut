@@ -1,12 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/shimmer_box.dart';
 
 class MemberAvatar extends StatelessWidget {
-  const MemberAvatar({required this.imageUrl, this.size = 44, super.key});
+  const MemberAvatar({
+    required this.imageUrl,
+    this.size = AppSpacing.avatarSize,
+    super.key,
+  });
 
   final String imageUrl;
   final double size;
@@ -20,12 +25,13 @@ class MemberAvatar extends StatelessWidget {
         : CachedNetworkImage(
             imageUrl: imageUrl,
             fit: BoxFit.cover,
-            placeholder: (context, _) => const ShimmerBox(radius: 50),
+            placeholder: (context, _) =>
+                ShimmerBox(width: size, height: size, radius: size / 2),
             errorWidget: (context, _, _) => const _AvatarFallback(),
           );
     return CircleAvatar(
       radius: size / 2,
-      backgroundColor: AppColors.hairline,
+      backgroundColor: context.palette.border,
       child: ClipOval(
         child: SizedBox(width: size, height: size, child: image),
       ),
@@ -38,7 +44,7 @@ class _AvatarFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Icon(Icons.person, color: AppColors.latte));
+    return Center(child: Icon(Icons.person, color: context.palette.textMuted));
   }
 }
 
@@ -53,7 +59,7 @@ class TierBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
-        vertical: 2,
+        vertical: AppSpacing.xxs,
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.18),
@@ -61,11 +67,8 @@ class TierBadge extends StatelessWidget {
       ),
       child: Text(
         tierLabel,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: color,
-        ),
+        style: Theme.of(context).textTheme.labelSmall
+            ?.copyWith(color: color, fontWeight: AppTypography.captionWeight),
       ),
     );
   }

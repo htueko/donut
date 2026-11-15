@@ -95,7 +95,7 @@ class _NameScreenState extends ConsumerState<NameScreen> {
       return;
     }
     _saveDraft();
-    context.go('/register/dob');
+    context.push('/register/dob');
   }
 
   @override
@@ -128,7 +128,7 @@ class _NameScreenState extends ConsumerState<NameScreen> {
             children: [
               const SizedBox(height: AppSpacing.xl),
               Text(
-                'What should we call you?',
+                l10n?.nameTitle ?? 'What should we call you?',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),

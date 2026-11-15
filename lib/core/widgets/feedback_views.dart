@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app/motion/app_motion.dart';
-import '../../app/theme/app_colors.dart';
+import '../../app/theme/app_palette.dart';
 import '../../app/theme/app_spacing.dart';
 import '../../core/formatters/price_mmk_formatter.dart';
 import '../../core/widgets/shimmer_box.dart';
@@ -14,24 +14,26 @@ class OfflineBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return AnimatedSize(
       duration: motionScale(context, AppMotion.base),
       curve: AppMotion.standard,
       child: Container(
         width: double.infinity,
-        color: AppColors.chocolate,
+        color: palette.textPrimary,
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.sm,
         ),
         child: Row(
           children: [
-            const Icon(Icons.cloud_off, size: 18, color: Colors.white),
+            Icon(Icons.cloud_off, size: 18, color: palette.background),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(color: Colors.white, fontSize: 13),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: palette.background),
               ),
             ),
           ],
@@ -57,7 +59,11 @@ class ErrorRetryView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.error_outline, size: 40, color: AppColors.latte),
+          Icon(
+            Icons.error_outline,
+            size: AppSpacing.errorIconSize,
+            color: context.palette.textMuted,
+          ),
           const SizedBox(height: AppSpacing.md),
           Text(message, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: AppSpacing.lg),
@@ -87,7 +93,11 @@ class EmptyStateView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 40, color: AppColors.latte),
+          Icon(
+            icon,
+            size: AppSpacing.emptyIconSize,
+            color: context.palette.textMuted,
+          ),
           const SizedBox(height: AppSpacing.md),
           Text(message, style: Theme.of(context).textTheme.bodyMedium),
         ],
@@ -130,9 +140,13 @@ class PriceText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      PriceMmkFormatter.format(amount),
+      PriceMmkFormatter.format(
+        amount,
+        locale: Localizations.localeOf(context).toString(),
+        unit: AppLocalizations.of(context)?.mmk ?? 'MMK',
+      ),
       style: Theme.of(context).textTheme.titleMedium
-          ?.copyWith(color: AppColors.seed, fontWeight: FontWeight.w700),
+          ?.copyWith(color: context.palette.primary),
     );
   }
 }
@@ -140,21 +154,28 @@ class PriceText extends StatelessWidget {
 class ProductTileSkeleton extends StatelessWidget {
   const ProductTileSkeleton({super.key});
 
-  static const double width = 148;
-
   @override
   Widget build(BuildContext context) {
     final scale = MediaQuery.textScalerOf(context).scale(1);
     return SizedBox(
-      width: width,
+      width: AppSpacing.tileWidth,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ShimmerBox(height: 104, radius: 16),
-          const SizedBox(height: 8),
-          ShimmerBox(height: 14 * scale, width: 110),
-          const SizedBox(height: 6),
-          ShimmerBox(height: 12 * scale, width: 70),
+          const ShimmerBox(
+            height: AppSpacing.tileImage,
+            radius: AppSpacing.radiusLg,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ShimmerBox(
+            height: AppSpacing.skeletonLine * scale,
+            width: AppSpacing.skeletonLineWidth,
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          ShimmerBox(
+            height: AppSpacing.skeletonLineSmall * scale,
+            width: AppSpacing.skeletonLineSmallWidth,
+          ),
         ],
       ),
     );

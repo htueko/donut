@@ -3,7 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../app/motion/app_motion.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
+import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 
 class RegistrationProgressRing extends StatefulWidget {
   const RegistrationProgressRing({
@@ -72,13 +74,17 @@ class _RegistrationProgressRingState extends State<RegistrationProgressRing>
   @override
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final palette = context.palette;
     return AnimatedSwitcher(
       duration: motionScale(context, AppMotion.base),
       switchInCurve: AppMotion.standard,
       child: _complete
-          ? const _CheckBadge()
+          ? _CheckBadge(
+              background: palette.success,
+              foreground: palette.onPrimary,
+            )
           : SizedBox.square(
-              dimension: 40,
+              dimension: AppSpacing.iconMd,
               child: AnimatedBuilder(
                 animation: _sweep,
                 builder: (context, _) {
@@ -87,14 +93,15 @@ class _RegistrationProgressRingState extends State<RegistrationProgressRing>
                       progress: reduceMotion
                           ? _fractionFor(widget.step)
                           : _sweep.value,
+                      track: palette.border,
+                      fill: palette.primary,
                     ),
                     child: Center(
                       child: Text(
                         '${widget.step}/${widget.total}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.chocolate,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          fontWeight: AppTypography.h2Weight,
+                          color: palette.textPrimary,
                         ),
                       ),
                     ),
@@ -107,51 +114,66 @@ class _RegistrationProgressRingState extends State<RegistrationProgressRing>
 }
 
 class _RingPainter extends CustomPainter {
-  const _RingPainter({required this.progress});
+  const _RingPainter({
+    required this.progress,
+    required this.track,
+    required this.fill,
+  });
+
+  static const double _stroke = 3.5;
 
   final double progress;
+  final Color track;
+  final Color fill;
 
   @override
   void paint(Canvas canvas, Size size) {
-    const stroke = 3.5;
     final rect = Rect.fromLTWH(
-      stroke / 2,
-      stroke / 2,
-      size.width - stroke,
-      size.height - stroke,
+      _stroke / 2,
+      _stroke / 2,
+      size.width - _stroke,
+      size.height - _stroke,
     );
-    final track = Paint()
-      ..color = AppColors.hairline
+    final trackPaint = Paint()
+      ..color = track
       ..style = PaintingStyle.stroke
-      ..strokeWidth = stroke
+      ..strokeWidth = _stroke
       ..strokeCap = StrokeCap.round;
-    canvas.drawArc(rect, 0, math.pi * 2, false, track);
-    final fill = Paint()
-      ..color = AppColors.seed
+    canvas.drawArc(rect, 0, math.pi * 2, false, trackPaint);
+    final fillPaint = Paint()
+      ..color = fill
       ..style = PaintingStyle.stroke
-      ..strokeWidth = stroke
+      ..strokeWidth = _stroke
       ..strokeCap = StrokeCap.round;
-    canvas.drawArc(rect, -math.pi / 2, math.pi * 2 * progress, false, fill);
+    canvas.drawArc(
+      rect,
+      -math.pi / 2,
+      math.pi * 2 * progress,
+      false,
+      fillPaint,
+    );
   }
 
   @override
   bool shouldRepaint(_RingPainter oldDelegate) =>
-      oldDelegate.progress != progress;
+      oldDelegate.progress != progress ||
+      oldDelegate.track != track ||
+      oldDelegate.fill != fill;
 }
 
 class _CheckBadge extends StatelessWidget {
-  const _CheckBadge();
+  const _CheckBadge({required this.background, required this.foreground});
+
+  final Color background;
+  final Color foreground;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 40,
-      decoration: const BoxDecoration(
-        color: AppColors.mint,
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(Icons.check, color: Colors.white, size: 22),
+      width: AppSpacing.iconMd,
+      height: AppSpacing.iconMd,
+      decoration: BoxDecoration(color: background, shape: BoxShape.circle),
+      child: Icon(Icons.check, color: foreground, size: AppSpacing.iconSm),
     );
   }
 }

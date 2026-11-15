@@ -21,13 +21,6 @@ enum Tier {
     };
   }
 
-  String get displayName => switch (this) {
-    Tier.bronze => 'Bronze',
-    Tier.silver => 'Silver',
-    Tier.gold => 'Gold',
-    Tier.platinum => 'Platinum',
-  };
-
   int get rank => switch (this) {
     Tier.bronze => 0,
     Tier.silver => 1,

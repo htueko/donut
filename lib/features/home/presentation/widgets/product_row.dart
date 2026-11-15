@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/widgets/feedback_views.dart';
 import '../../../catalog/domain/product.dart';
@@ -39,7 +39,8 @@ class ProductRow extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       emptyMessage,
-                      style: const TextStyle(color: AppColors.latte),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: context.palette.textMuted),
                     ),
                   ),
                 )

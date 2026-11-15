@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/motion/app_motion.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -96,8 +97,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             l10n?.onboardingTitle ??
                                 'Round food for every mood',
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.displayLarge
-                                ?.copyWith(fontSize: 30),
+                            style: Theme.of(context).textTheme.headlineMedium
+                                ?.copyWith(
+                                  fontSize: AppTypography.onboardingTitleSize,
+                                ),
                           ),
                         ),
                         const Spacer(flex: 6),
@@ -153,6 +156,30 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 }
 
+/// Fixed geometry for the decorative donut illustration.
+abstract final class _Layout {
+  static const double blobOneTop = 40;
+  static const double blobOneLeft = 24;
+  static const double blobOneSize = 88;
+  static const double blobOneFloatY = 10;
+  static const double blobOneFloatX = 8;
+
+  static const double blobTwoTop = 120;
+  static const double blobTwoRight = 16;
+  static const double blobTwoSize = 120;
+  static const double blobTwoFloatY = 12;
+  static const double blobTwoFloatX = 8;
+
+  static const double blobThreeTop = 220;
+  static const double blobThreeLeft = 60;
+  static const double blobThreeSize = 56;
+  static const double blobThreeFloatY = 10;
+  static const double blobThreeFloatX = 10;
+
+  static const double heroImageHeight = 220;
+  static const double blobHoleRatio = 0.4;
+}
+
 class _FadeRise extends StatelessWidget {
   const _FadeRise({
     required this.fade,
@@ -187,24 +214,37 @@ class _Illustration extends StatelessWidget {
         return Stack(
           children: [
             Positioned(
-              top: 40 + math.sin(t) * 10,
-              left: 24 + math.cos(t) * 8,
-              child: const _DonutBlob(color: AppColors.glaze, size: 88),
+              top: _Layout.blobOneTop + math.sin(t) * _Layout.blobOneFloatY,
+              left: _Layout.blobOneLeft + math.cos(t) * _Layout.blobOneFloatX,
+              child: _DonutBlob(
+                color: context.palette.warning,
+                size: _Layout.blobOneSize,
+              ),
             ),
             Positioned(
-              top: 120 + math.cos(t) * 12,
-              right: 16 + math.sin(t) * 8,
-              child: const _DonutBlob(color: AppColors.seed, size: 120),
+              top: _Layout.blobTwoTop + math.cos(t) * _Layout.blobTwoFloatY,
+              right: _Layout.blobTwoRight + math.sin(t) * _Layout.blobTwoFloatX,
+              child: _DonutBlob(
+                color: context.palette.primary,
+                size: _Layout.blobTwoSize,
+              ),
             ),
             Positioned(
-              top: 220 + math.sin(t + 1) * 10,
-              left: 60 + math.cos(t + 1) * 10,
-              child: const _DonutBlob(color: AppColors.mint, size: 56),
+              top:
+                  _Layout.blobThreeTop +
+                  math.sin(t + 1) * _Layout.blobThreeFloatY,
+              left:
+                  _Layout.blobThreeLeft +
+                  math.cos(t + 1) * _Layout.blobThreeFloatX,
+              child: _DonutBlob(
+                color: context.palette.success,
+                size: _Layout.blobThreeSize,
+              ),
             ),
             Center(
               child: Image.asset(
                 'assets/seed/images/donut_coconut.png',
-                height: 220,
+                height: _Layout.heroImageHeight,
                 filterQuality: FilterQuality.medium,
               ),
             ),
@@ -232,10 +272,10 @@ class _DonutBlob extends StatelessWidget {
       ),
       child: Center(
         child: Container(
-          width: size * 0.4,
-          height: size * 0.4,
-          decoration: const BoxDecoration(
-            color: AppColors.cream,
+          width: size * _Layout.blobHoleRatio,
+          height: size * _Layout.blobHoleRatio,
+          decoration: BoxDecoration(
+            color: context.palette.background,
             shape: BoxShape.circle,
           ),
         ),
@@ -266,12 +306,12 @@ class _SocialRow extends StatelessWidget {
           _SocialButton(icon: const Text('G'), onTap: onComingSoon),
           const SizedBox(width: AppSpacing.md),
           _SocialButton(
-            icon: const Icon(Icons.apple, color: AppColors.chocolate),
+            icon: Icon(Icons.apple, color: context.palette.textPrimary),
             onTap: onComingSoon,
           ),
           const SizedBox(width: AppSpacing.md),
           _SocialButton(
-            icon: const Icon(Icons.facebook, color: AppColors.chocolate),
+            icon: Icon(Icons.facebook, color: context.palette.textPrimary),
             onTap: onComingSoon,
           ),
         ],
@@ -288,9 +328,10 @@ class _SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Material(
-      color: AppColors.paper,
-      shape: const CircleBorder(side: BorderSide(color: AppColors.hairline)),
+      color: palette.surface,
+      shape: CircleBorder(side: BorderSide(color: palette.border)),
       clipBehavior: Clip.antiAlias,
       child: IconButton(onPressed: onTap, icon: icon),
     );
@@ -304,14 +345,18 @@ class _LegalLinks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(onPressed: onComingSoon, child: const Text('Terms of Use')),
-        const Text('·', style: TextStyle(color: AppColors.latte)),
         TextButton(
           onPressed: onComingSoon,
-          child: const Text('Privacy Policy'),
+          child: Text(l10n?.termsOfUse ?? 'Terms of Use'),
+        ),
+        Text('·', style: TextStyle(color: context.palette.textMuted)),
+        TextButton(
+          onPressed: onComingSoon,
+          child: Text(l10n?.privacyPolicy ?? 'Privacy Policy'),
         ),
       ],
     );

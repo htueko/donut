@@ -1,8 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
+import '../../../../core/formatters/percent_formatter.dart';
+import '../../../../core/formatters/price_mmk_formatter.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../catalog/domain/product.dart';
 import 'product_image.dart';
 
@@ -12,17 +18,32 @@ class ProductTile extends StatelessWidget {
   final Product product;
 
   /// Artwork is a fixed size; the text under it grows with the user's text
-  /// scale, so the row has to grow with it or the tiles clip.
+  /// scale, so the row has to grow with it or the tiles clip. Heights come from
+  /// the same roles the tile renders with, and the price row reserves room for
+  /// the discount badge so every tile in a strip stays the same height.
   static double heightFor(BuildContext context) {
     final scaler = MediaQuery.textScalerOf(context);
-    // Image, gap, name line and price line: each text line grows with scale.
-    final name = scaler.scale(20);
-    final price = scaler.scale(18);
-    return AppSpacing.tileImage + AppSpacing.sm + name + 2 + price;
+    final priceLine = max(
+      AppTypography.lineHeight(AppTypography.bodySmall, scaler),
+      AppTypography.lineHeight(AppTypography.caption, scaler) +
+          AppSpacing.badgeVerticalPadding * 2,
+    );
+    return AppSpacing.tileImage +
+        AppSpacing.sm +
+        AppTypography.lineHeight(AppTypography.titleSmall, scaler) +
+        AppSpacing.xxs +
+        priceLine;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final price = PriceMmkFormatter.format(
+      product.priceMmk,
+      locale: locale,
+      unit: l10n?.mmk ?? 'MMK',
+    );
     return GestureDetector(
       onTap: () => context.push('/product/${product.id}'),
       child: SizedBox(
@@ -43,43 +64,37 @@ class ProductTile extends StatelessWidget {
               product.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                color: AppColors.chocolate,
-              ),
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(color: context.palette.textPrimary),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: AppSpacing.xxs),
             Row(
               children: [
                 Flexible(
                   child: Text(
-                    '${_formatPrice(product.priceMmk)} MMK',
+                    price,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.cocoa,
-                      fontSize: 12,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: context.palette.textSecondary),
                   ),
                 ),
                 if (product.discountPercent != null) ...[
                   const SizedBox(width: AppSpacing.xs),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 1,
+                      horizontal: AppSpacing.badgeHorizontalPadding,
+                      vertical: AppSpacing.badgeVerticalPadding,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.seed.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(4),
+                      color: context.palette.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                     ),
                     child: Text(
-                      '-${product.discountPercent}%',
-                      style: const TextStyle(
-                        color: AppColors.seed,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
+                      '-${PercentFormatter.format(product.discountPercent!, locale: locale)}',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: context.palette.primary,
+                        fontWeight: AppTypography.buttonWeight,
                       ),
                     ),
                   ),
@@ -91,16 +106,4 @@ class ProductTile extends StatelessWidget {
       ),
     );
   }
-}
-
-String _formatPrice(int amount) {
-  final digits = amount.toString();
-  final buffer = StringBuffer();
-  for (var i = 0; i < digits.length; i++) {
-    if (i > 0 && (digits.length - i) % 3 == 0) {
-      buffer.write(',');
-    }
-    buffer.write(digits[i]);
-  }
-  return buffer.toString();
 }

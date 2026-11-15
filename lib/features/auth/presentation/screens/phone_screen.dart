@@ -68,14 +68,14 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
     if (widget.isLogin) {
       ref.read(loginPhoneProvider.notifier).state = normalized;
       if (mounted) {
-        context.go('/login/otp');
+        await context.push('/login/otp');
       }
     } else {
       ref
           .read(registrationDraftProvider.notifier)
           .update((draft) => draft.copyWith(phoneE164: normalized));
       if (mounted) {
-        context.go('/register/otp');
+        await context.push('/register/otp');
       }
     }
     if (mounted) {

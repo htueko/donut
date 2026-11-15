@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/motion/app_motion.dart';
-import '../../../app/theme/app_colors.dart';
+import '../../../app/theme/app_palette.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../app/theme/app_typography.dart';
+import '../../../core/formatters/percent_formatter.dart';
 import '../../../core/formatters/price_mmk_formatter.dart';
 import '../../../core/result.dart';
 import '../../../core/widgets/feedback_views.dart';
@@ -96,6 +98,7 @@ class _ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -108,14 +111,15 @@ class _ProductDetail extends StatelessWidget {
           tag: 'product-${product.id}',
           child: ProductImage(
             imageUrl: product.imageUrl,
-            size: 320,
+            size: AppSpacing.detailImageSize,
             isNew: product.isNew,
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
         Text(
-          'Code ${product.code}',
-          style: const TextStyle(color: AppColors.cocoa, fontSize: 12),
+          l10n?.productCode(product.code) ?? 'Code ${product.code}',
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: context.palette.textSecondary),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(product.name, style: Theme.of(context).textTheme.headlineSmall),
@@ -124,11 +128,16 @@ class _ProductDetail extends StatelessWidget {
         if (product.discountPercent != null) ...[
           const SizedBox(height: AppSpacing.xs),
           Text(
-            '${product.discountPercent}% off',
-            style: const TextStyle(
-              color: AppColors.seed,
-              fontWeight: FontWeight.w700,
-              fontSize: 12,
+            l10n?.discountOff(
+                  PercentFormatter.format(
+                    product.discountPercent!,
+                    locale: Localizations.localeOf(context).toString(),
+                  ),
+                ) ??
+                '${product.discountPercent}% off',
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: context.palette.primary,
+              fontWeight: AppTypography.h2Weight,
             ),
           ),
         ],
@@ -143,11 +152,8 @@ class _ProductDetail extends StatelessWidget {
               ? (AppLocalizations.of(context)?.emptyGeneric ??
                     'Nothing here yet')
               : product.description,
-          style: const TextStyle(
-            color: AppColors.cocoa,
-            height: 1.4,
-            fontSize: 14,
-          ),
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(color: context.palette.textSecondary),
         ),
         const SizedBox(height: AppSpacing.xl),
         Row(
@@ -176,13 +182,15 @@ class _AddToCartBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final total = product.priceMmk * quantity;
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         Row(
           children: [
             Text(
-              AppLocalizations.of(context)?.total ?? 'Total',
-              style: const TextStyle(color: AppColors.cocoa, fontSize: 13),
+              l10n?.total ?? 'Total',
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: context.palette.textSecondary),
             ),
             const Spacer(),
             AnimatedSwitcher(
@@ -198,12 +206,15 @@ class _AddToCartBar extends StatelessWidget {
                 ),
               ),
               child: Text(
-                PriceMmkFormatter.format(total),
+                PriceMmkFormatter.format(
+                  total,
+                  locale: Localizations.localeOf(context).toString(),
+                  unit: l10n?.mmk ?? 'MMK',
+                ),
                 key: ValueKey<int>(total),
-                style: const TextStyle(
-                  color: AppColors.chocolate,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 16,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: context.palette.textPrimary,
+                  fontWeight: AppTypography.h1Weight,
                 ),
               ),
             ),

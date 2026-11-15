@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/result.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -66,7 +66,7 @@ class _DobScreenState extends ConsumerState<DobScreen> {
     result.when(
       onSuccess: (_) {
         ref.invalidate(registrationDraftProvider);
-        context.go('/welcome');
+        context.push('/welcome');
       },
       onFailure: (failure) {
         setState(() => _submitting = false);
@@ -82,6 +82,7 @@ class _DobScreenState extends ConsumerState<DobScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
     final error = _date == null
         ? null
         : DobValidator.validate(_date).messageKey;
@@ -116,27 +117,27 @@ class _DobScreenState extends ConsumerState<DobScreen> {
                     vertical: AppSpacing.lg,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.paper,
+                    color: palette.surface,
                     borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                     border: Border.all(
-                      color: _date == null
-                          ? AppColors.hairline
-                          : AppColors.seed,
+                      color: _date == null ? palette.border : palette.primary,
                     ),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.cake_outlined, color: AppColors.latte),
+                      Icon(Icons.cake_outlined, color: palette.textMuted),
                       const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Text(
                           _date == null
                               ? (l10n?.selectDate ?? 'Select date')
-                              : DateFormat.yMMMd().format(_date!),
+                              : DateFormat.yMMMd(
+                                  Localizations.localeOf(context).toString(),
+                                ).format(_date!),
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
-                      const Icon(Icons.chevron_right, color: AppColors.latte),
+                      Icon(Icons.chevron_right, color: palette.textMuted),
                     ],
                   ),
                 ),
@@ -145,7 +146,8 @@ class _DobScreenState extends ConsumerState<DobScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   _dobErrorMessage(error, l10n),
-                  style: const TextStyle(color: AppColors.danger),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: palette.danger),
                 ),
               ],
               const SizedBox(height: AppSpacing.lg),

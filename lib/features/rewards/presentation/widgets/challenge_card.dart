@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../app/motion/app_motion.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../catalog/domain/catalog_enums.dart';
 import '../../../catalog/domain/challenge.dart';
 import 'challenge_painters.dart';
@@ -96,28 +98,42 @@ class _Card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.paper,
+        color: palette.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-        border: Border.all(color: AppColors.hairline),
+        border: Border.all(color: palette.border),
       ),
       child: Row(
         children: [
           SizedBox.square(
-            dimension: 60,
+            dimension: AppSpacing.challengeIconSize,
             child: CustomPaint(
               painter: challenge.kind == ChallengeKind.donut
-                  ? DonutQuarterPainter(fill: fill, complete: complete)
-                  : CoffeeArcPainter(fill: fill, complete: complete),
+                  ? DonutQuarterPainter(
+                      fill: fill,
+                      complete: complete,
+                      track: palette.shimmerBase,
+                      progress: palette.primary,
+                      success: palette.success,
+                      center: palette.background,
+                      onProgress: palette.onPrimary,
+                    )
+                  : CoffeeArcPainter(
+                      fill: fill,
+                      complete: complete,
+                      track: palette.border,
+                      progress: palette.accent,
+                      success: palette.success,
+                    ),
               child: Center(
                 child: Text(
                   '${shown.round()}/${challenge.target}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.chocolate,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    fontWeight: AppTypography.buttonWeight,
+                    color: palette.textPrimary,
                   ),
                 ),
               ),
@@ -130,22 +146,17 @@ class _Card extends StatelessWidget {
               children: [
                 Text(
                   challenge.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.chocolate,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall
+                      ?.copyWith(color: palette.textPrimary),
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
                   child: LinearProgressIndicator(
                     value: challenge.progress,
-                    minHeight: 6,
-                    backgroundColor: AppColors.hairline,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.seed,
-                    ),
+                    minHeight: AppSpacing.progressBarHeight,
+                    backgroundColor: palette.border,
+                    valueColor: AlwaysStoppedAnimation<Color>(palette.primary),
                   ),
                 ),
               ],
@@ -208,7 +219,8 @@ class _EarnButtonState extends State<_EarnButton>
 
   @override
   Widget build(BuildContext context) {
-    final label = widget.label ?? 'Earn';
+    final palette = context.palette;
+    final label = widget.label ?? AppLocalizations.of(context)?.earn ?? 'Earn';
     if (!widget.active) {
       return Container(
         padding: const EdgeInsets.symmetric(
@@ -216,16 +228,13 @@ class _EarnButtonState extends State<_EarnButton>
           vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
-          color: AppColors.shimmerBase,
+          color: palette.shimmerBase,
           borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: AppColors.latte,
-          ),
+          style: Theme.of(context).textTheme.labelSmall
+              ?.copyWith(color: palette.textMuted),
         ),
       );
     }
@@ -238,18 +247,19 @@ class _EarnButtonState extends State<_EarnButton>
             borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
             boxShadow: [
               BoxShadow(
-                color: AppColors.seed.withValues(alpha: 0.18 + 0.22 * glow),
-                blurRadius: 8 + 8 * glow,
-                spreadRadius: 1,
+                color: palette.primary.withValues(alpha: 0.18 + 0.22 * glow),
+                blurRadius:
+                    AppSpacing.glowBlurBase + AppSpacing.glowBlurRange * glow,
+                spreadRadius: AppSpacing.glowSpread,
               ),
             ],
           ),
           child: Material(
-            color: AppColors.seed,
+            color: palette.primary,
             borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
             clipBehavior: Clip.antiAlias,
             child: InkResponse(
-              radius: 26,
+              radius: AppSpacing.radiusPill / 2,
               onTap: () => _nudge(context),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -258,10 +268,9 @@ class _EarnButtonState extends State<_EarnButton>
                 ),
                 child: Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    fontWeight: AppTypography.buttonWeight,
+                    color: palette.onPrimary,
                   ),
                 ),
               ),
@@ -274,10 +283,14 @@ class _EarnButtonState extends State<_EarnButton>
 
   void _nudge(BuildContext context) {
     HapticFeedback.selectionClick();
+    final l10n = AppLocalizations.of(context);
+    final label = widget.label ?? l10n?.earn ?? 'Earn';
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(content: Text('${widget.label ?? 'Earn'} tapped')),
+        SnackBar(
+          content: Text(l10n?.challengeTapped(label) ?? '$label tapped'),
+        ),
       );
   }
 }

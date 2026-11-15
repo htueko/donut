@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/motion/app_motion.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
+import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 
 class QuantityStepper extends StatelessWidget {
   const QuantityStepper({
@@ -33,7 +35,7 @@ class QuantityStepper extends StatelessWidget {
           onPressed: quantity > min ? () => _change(-1) : null,
         ),
         SizedBox(
-          width: 44,
+          width: AppSpacing.stepperWidth,
           child: AnimatedSwitcher(
             duration: motionScale(context, AppMotion.fast),
             transitionBuilder: (child, animation) => SlideTransition(
@@ -47,10 +49,10 @@ class QuantityStepper extends StatelessWidget {
               '$quantity',
               key: ValueKey<int>(quantity),
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF43302B),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontSize: AppSpacing.stepperFontSize,
+                fontWeight: AppTypography.h2Weight,
+                color: context.palette.textPrimary,
               ),
             ),
           ),
@@ -70,19 +72,20 @@ class _StepButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
+    final palette = context.palette;
     return Material(
-      color: enabled ? AppColors.cream : AppColors.shimmerBase,
+      color: enabled ? palette.background : palette.shimmerBase,
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
       child: InkResponse(
-        radius: 26,
+        radius: AppSpacing.stepButtonSize / 2,
         onTap: onPressed,
         child: SizedBox.square(
-          dimension: 40,
+          dimension: AppSpacing.stepButtonSize,
           child: Icon(
             icon,
-            size: 20,
-            color: enabled ? AppColors.cocoa : AppColors.latte,
+            size: AppSpacing.iconSm,
+            color: enabled ? palette.textPrimary : palette.textMuted,
           ),
         ),
       ),

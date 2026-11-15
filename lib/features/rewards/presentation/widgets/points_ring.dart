@@ -1,11 +1,16 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/motion/app_motion.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
+import '../../../../core/formatters/decimal_formatter.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../catalog/domain/catalog_enums.dart';
+import '../../../catalog/presentation/tier_label.dart';
 
 /// Sweeps a ring from empty to [progress] while a total counts up from 0.
 class PointsRing extends StatefulWidget {
@@ -53,6 +58,8 @@ class _PointsRingState extends State<PointsRing>
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
+    final palette = context.palette;
     return AnimatedBuilder(
       animation: Listenable.merge([_sweep, _controller]),
       builder: (context, _) {
@@ -65,25 +72,29 @@ class _PointsRingState extends State<PointsRing>
         return SizedBox.square(
           dimension: widget.size,
           child: CustomPaint(
-            painter: PointsRingPainter(progress: sweep, active: AppColors.seed),
+            painter: PointsRingPainter(
+              progress: sweep,
+              track: palette.border,
+              active: palette.primary,
+              mid: palette.accent,
+              highlight: palette.warning,
+            ),
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    PointsRingPainter.formatPoints(points),
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.chocolate,
+                    PointsRingPainter.formatPoints(points, locale),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontSize: AppSpacing.pointsRingFontSize,
+                      fontWeight: AppTypography.h1Weight,
+                      color: palette.textPrimary,
                     ),
                   ),
                   Text(
                     widget.centerLabel,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: AppColors.cocoa,
-                    ),
+                    style: Theme.of(context).textTheme.labelSmall
+                        ?.copyWith(color: palette.textSecondary),
                   ),
                 ],
               ),
@@ -96,34 +107,42 @@ class _PointsRingState extends State<PointsRing>
 }
 
 class PointsRingPainter extends CustomPainter {
-  const PointsRingPainter({required this.progress, required this.active});
+  const PointsRingPainter({
+    required this.progress,
+    required this.active,
+    required this.track,
+    required this.mid,
+    required this.highlight,
+  });
 
-  static const double stroke = 12;
+  static const double stroke = AppSpacing.ringStroke;
 
-  static final NumberFormat _decimal = NumberFormat.decimalPattern('en');
-
-  static String formatPoints(int points) => _decimal.format(points);
+  static String formatPoints(int points, [String? locale]) =>
+      DecimalFormatter.format(points, locale: locale);
 
   final double progress;
   final Color active;
+  final Color track;
+  final Color mid;
+  final Color highlight;
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = (size.shortestSide - stroke) / 2;
-    final track = Paint()
+    final trackPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round
-      ..color = AppColors.hairline;
-    canvas.drawCircle(center, radius, track);
+      ..color = track;
+    canvas.drawCircle(center, radius, trackPaint);
 
     final sweep = progress.clamp(0.0, 1.0) * math.pi * 2;
-    const gradient = SweepGradient(
+    final gradient = SweepGradient(
       startAngle: -math.pi / 2,
       endAngle: math.pi * 1.5,
-      colors: [AppColors.seed, AppColors.caramel, AppColors.glaze],
-      stops: [0, 0.6, 1],
+      colors: [active, mid, highlight],
+      stops: const [0, 0.6, 1],
     );
     final fill = Paint()
       ..style = PaintingStyle.stroke
@@ -148,6 +167,10 @@ class PointsRingPainter extends CustomPainter {
 
 /// Segmented tier track: Silver → Gold → Platinum with a fill up to the member's
 /// progress and the current tier called out.
+/// Shows tier progress as a track of nodes, with the current tier called out.
+///
+/// Tiers are passed as [Tier] values rather than display strings so node colors
+/// stay keyed to the enum even when the labels are localized.
 class TierLadder extends StatelessWidget {
   const TierLadder({
     required this.tiers,
@@ -156,14 +179,15 @@ class TierLadder extends StatelessWidget {
     super.key,
   });
 
-  final List<String> tiers;
+  final List<Tier> tiers;
   final int currentIndex;
   final double fractionIntoTier;
 
   @override
   Widget build(BuildContext context) {
-    const node = 18.0;
-    const trackHeight = 4.0;
+    const node = AppSpacing.tierNodeSize;
+    const trackHeight = AppSpacing.tierTrackHeight;
+    final l10n = AppLocalizations.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -182,7 +206,7 @@ class TierLadder extends StatelessWidget {
                 top: (node - trackHeight) / 2,
                 child: Container(
                   height: trackHeight,
-                  color: AppColors.hairline,
+                  color: context.palette.border,
                 ),
               ),
               Positioned(
@@ -192,7 +216,7 @@ class TierLadder extends StatelessWidget {
                 child: Container(
                   height: trackHeight,
                   decoration: BoxDecoration(
-                    color: AppColors.seed,
+                    color: context.palette.primary,
                     borderRadius: BorderRadius.circular(trackHeight),
                   ),
                 ),
@@ -202,10 +226,10 @@ class TierLadder extends StatelessWidget {
                   left: i * step,
                   top: 0,
                   child: _TierNode(
-                    label: tiers[i],
+                    label: tiers[i].localizedLabel(l10n),
                     reached: i <= currentIndex,
                     current: i == currentIndex,
-                    color: AppColors.tierColor(tiers[i].toLowerCase()),
+                    color: AppColors.tierColor(tiers[i].name),
                   ),
                 ),
             ],
@@ -236,10 +260,10 @@ class _TierNode extends StatelessWidget {
       height: 18,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: reached ? color : AppColors.paper,
+        color: reached ? color : context.palette.surface,
         border: Border.all(
-          color: reached ? color : AppColors.hairline,
-          width: 2,
+          color: reached ? color : context.palette.border,
+          width: AppSpacing.hairlineWidth,
         ),
         boxShadow: current
             ? [
@@ -252,7 +276,11 @@ class _TierNode extends StatelessWidget {
             : null,
       ),
       child: reached
-          ? const Icon(Icons.check, size: 11, color: Colors.white)
+          ? Icon(
+              Icons.check,
+              size: AppSpacing.tierCheckSize,
+              color: context.palette.onPrimary,
+            )
           : null,
     );
     if (!current) {
@@ -264,14 +292,15 @@ class _TierNode extends StatelessWidget {
         dot,
         const SizedBox(height: AppSpacing.xs),
         ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 96),
+          constraints: const BoxConstraints(
+            maxWidth: AppSpacing.tierLabelMaxWidth,
+          ),
           child: Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontWeight: AppTypography.buttonWeight,
               color: color,
             ),
           ),

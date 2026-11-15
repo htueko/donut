@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/motion/app_motion.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/feedback_views.dart';
 
 /// Two-tab switch whose pill slides between labels and whose list cross-fades.
@@ -90,14 +91,15 @@ class _PillBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth / labels.length;
         return Container(
-          height: 44,
-          padding: const EdgeInsets.all(4),
+          height: AppSpacing.tabBarHeight,
+          padding: const EdgeInsets.all(AppSpacing.xs),
           decoration: BoxDecoration(
-            color: AppColors.shimmerBase,
+            color: palette.shimmerBase,
             borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
           ),
           child: Stack(
@@ -107,15 +109,15 @@ class _PillBar extends StatelessWidget {
                 duration: motionScale(context, AppMotion.base),
                 curve: AppMotion.emphasized,
                 child: Container(
-                  width: width - 8,
+                  width: width - AppSpacing.sm,
                   decoration: BoxDecoration(
-                    color: AppColors.paper,
+                    color: palette.surface,
                     borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: Color(0x14000000),
-                        blurRadius: 6,
-                        offset: Offset(0, 2),
+                        color: palette.shadow,
+                        blurRadius: AppSpacing.tabShadowBlur,
+                        offset: const Offset(0, AppSpacing.xxs),
                       ),
                     ],
                   ),
@@ -133,14 +135,13 @@ class _PillBar extends StatelessWidget {
                         child: Center(
                           child: AnimatedDefaultTextStyle(
                             duration: motionScale(context, AppMotion.fast),
-                            style: TextStyle(
-                              fontSize: 13,
+                            style: AppTypography.caption.copyWith(
                               fontWeight: i == selected
-                                  ? FontWeight.w800
-                                  : FontWeight.w600,
+                                  ? AppTypography.h2Weight
+                                  : AppTypography.subtitleWeight,
                               color: i == selected
-                                  ? AppColors.chocolate
-                                  : AppColors.cocoa,
+                                  ? palette.textPrimary
+                                  : palette.textSecondary,
                             ),
                             child: Text(
                               labels[i],

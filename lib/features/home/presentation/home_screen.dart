@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../core/formatters/decimal_formatter.dart';
 import '../../../../core/widgets/feedback_views.dart';
 import '../../../../core/widgets/shimmer_box.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ import '../../catalog/domain/catalog_enums.dart';
 import '../../catalog/domain/member.dart';
 import '../../catalog/domain/shop.dart';
 import '../../catalog/domain/tier_progress.dart';
+import '../../catalog/presentation/tier_label.dart';
 import 'widgets/banner_carousel.dart';
 import 'widgets/member_avatar.dart';
 import 'widgets/product_row.dart';
@@ -104,9 +106,18 @@ class _MemberHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final progress = TierProgress(member.tier, member.points);
-    final points = NumberFormat.decimalPattern('en').format(member.points);
-    final toNext = NumberFormat.decimalPattern('en')
-        .format(progress.pointsToNext);
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final points = DecimalFormatter.format(member.points, locale: locale);
+    final toNext = DecimalFormatter.format(
+      progress.pointsToNext,
+      locale: locale,
+    );
+    final nextTier =
+        progress.nextTier?.localizedLabel(l10n) ?? l10n?.max ?? 'max';
+    final progressText =
+        l10n?.memberProgress(points, nextTier, toNext) ??
+        '$points pts · $toNext to $nextTier';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
@@ -123,24 +134,21 @@ class _MemberHeader extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: AppSpacing.xxs),
                 Row(
                   children: [
                     TierBadge(
-                      tierLabel: member.tier.displayName,
+                      tierLabel: member.tier.localizedLabel(l10n),
                       color: AppColors.tierColor(member.tier.name),
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
-                        '$points pts · $toNext to '
-                        '${progress.nextTier?.displayName ?? 'max'}',
+                        progressText,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppColors.cocoa,
-                        ),
+                        style: Theme.of(context).textTheme.labelSmall
+                            ?.copyWith(color: context.palette.textSecondary),
                       ),
                     ),
                   ],
@@ -192,7 +200,8 @@ class _NearbyShops extends StatelessWidget {
                     ),
                     child: Text(
                       l10n?.emptyGeneric ?? 'Nothing here yet',
-                      style: const TextStyle(color: AppColors.latte),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: context.palette.textMuted),
                     ),
                   ),
                 )

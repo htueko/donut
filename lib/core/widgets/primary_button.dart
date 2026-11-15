@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../app/motion/app_motion.dart';
+import '../../app/theme/app_palette.dart';
+import '../../app/theme/app_spacing.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -30,11 +32,11 @@ class PrimaryButton extends StatelessWidget {
           duration: motionScale(context, AppMotion.base),
           switchInCurve: AppMotion.standard,
           child: busy
-              ? const SizedBox.square(
-                  dimension: 20,
+              ? SizedBox.square(
+                  dimension: AppSpacing.spinnerSize,
                   child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
+                    strokeWidth: AppSpacing.hairlineWidth,
+                    color: context.palette.onPrimary,
                   ),
                 )
               : Row(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_palette.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({required this.child, super.key});
@@ -20,14 +20,15 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
     final location = GoRouterState.of(context).uri.toString();
     return Scaffold(
       body: child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _indexOf(location),
         onDestinationSelected: (index) => context.go(_tabs[index]),
-        backgroundColor: AppColors.paper,
-        indicatorColor: AppColors.seed.withValues(alpha: 0.16),
+        backgroundColor: palette.surface,
+        indicatorColor: palette.primary.withValues(alpha: 0.16),
         destinations: [
           NavigationDestination(
             icon: const Icon(Icons.home_outlined),
@@ -72,15 +73,14 @@ class AppShell extends StatelessWidget {
 class _RewardsTabIcon extends StatelessWidget {
   const _RewardsTabIcon({required this.selected});
 
-  static const int badgeCount = 3;
+  static const _badgeCount = 3;
 
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return Badge(
-      label: const Text('$badgeCount'),
-      backgroundColor: AppColors.seed,
+      label: const Text('$_badgeCount'),
       child: Icon(
         selected ? Icons.card_giftcard : Icons.card_giftcard_outlined,
       ),

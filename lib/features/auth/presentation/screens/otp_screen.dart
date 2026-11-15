@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/motion/app_motion.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/result.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -157,7 +157,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
               .read(registrationDraftProvider.notifier)
               .update((draft) => draft.copyWith(otp: _code));
           setState(() => _submitting = false);
-          context.go('/register/name');
+          context.push('/register/name');
         },
         onFailure: (failure) => _onFailure(failure),
       );
@@ -187,6 +187,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
         } else {
           _errorKey = 'otpInvalid';
         }
+      } else if (failure is NotFoundFailure) {
+        _errorKey = 'phone_not_registered';
       } else {
         _errorKey = 'otpInvalid';
       }
@@ -222,6 +224,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
         ? null
         : (_errorKey == 'otpLocked'
               ? (l10n?.otpLocked ?? 'Too many wrong tries. Tap Resend.')
+              : _errorKey == 'phone_not_registered'
+              ? (l10n?.phoneNotRegistered ?? 'Phone number not registered')
               : (l10n?.otpInvalid ?? 'That code doesn\'t look right.'));
     return Scaffold(
       appBar: AppBar(
@@ -281,7 +285,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                     : Text(
                         errorText,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.danger),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: context.palette.danger),
                       ),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -290,22 +295,37 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                     ? _submit
                     : null,
                 child: _submitting
-                    ? const SizedBox.square(
-                        dimension: 20,
+                    ? SizedBox.square(
+                        dimension:
+                            AppSpacing.sm + AppSpacing.sm + AppSpacing.xs,
                         child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
+                          strokeWidth: AppSpacing.hairlineWidth,
+                          color: context.palette.onPrimary,
                         ),
                       )
                     : Text(l10n?.continueLabel ?? 'Continue'),
               ),
+              const SizedBox(height: AppSpacing.md),
+              if (_errorKey == 'phone_not_registered') ...[
+                const SizedBox(height: AppSpacing.sm),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      ref.read(loginPhoneProvider.notifier).state = null;
+                      context.go('/register/phone');
+                    },
+                    child: Text(l10n?.register ?? 'Register'),
+                  ),
+                ),
+              ],
               const SizedBox(height: AppSpacing.md),
               Center(
                 child: _secondsLeft > 0
                     ? Text(
                         l10n?.resendIn(_formatClock()) ??
                             'Resend in ${_formatClock()}',
-                        style: const TextStyle(color: AppColors.latte),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: context.palette.textMuted),
                       )
                     : TextButton(
                         onPressed: _resend,
