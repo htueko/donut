@@ -207,7 +207,7 @@ class _HomeSkeleton extends StatelessWidget {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               ShimmerBox(width: 44, height: 44, radius: 22),
               SizedBox(width: AppSpacing.md),
@@ -221,12 +221,12 @@ class _HomeSkeleton extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
-          const ShimmerBox(height: 140, radius: 16),
-          const SizedBox(height: AppSpacing.lg),
-          const ShimmerBox(width: 160, height: 16),
-          const SizedBox(height: AppSpacing.md),
-          const Row(
+          SizedBox(height: AppSpacing.lg),
+          ShimmerBox(height: 140, radius: 16),
+          SizedBox(height: AppSpacing.lg),
+          ShimmerBox(width: 160, height: 16),
+          SizedBox(height: AppSpacing.md),
+          Row(
             children: [
               ProductTileSkeleton(),
               SizedBox(width: AppSpacing.md),
@@ -235,15 +235,15 @@ class _HomeSkeleton extends StatelessWidget {
               ProductTileSkeleton(),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
-          const ShimmerBox(width: 120, height: 16),
-          const SizedBox(height: AppSpacing.md),
+          SizedBox(height: AppSpacing.lg),
+          ShimmerBox(width: 120, height: 16),
+          SizedBox(height: AppSpacing.md),
           Row(
             children: [
               ProductTileSkeleton(),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               ProductTileSkeleton(),
-              const SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.md),
               ProductTileSkeleton(),
             ],
           ),
