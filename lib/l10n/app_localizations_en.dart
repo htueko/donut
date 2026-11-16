@@ -190,9 +190,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialLoginComingSoon => 'Social sign-in is coming soon';
 
   @override
-  String get legalComingSoon => 'This link is not part of the demo';
-
-  @override
   String get loggedOutMessage => 'You\'ve been logged out';
 
   @override
@@ -269,6 +266,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get legalUpdated => 'Last updated 15 November 2026';
+
+  @override
+  String get termsIntro =>
+      'These terms are placeholder copy for the J\'Donuts demo. They explain the rules for using the app and are not legal advice.';
+
+  @override
+  String get termsSection1Title => 'Using the app';
+
+  @override
+  String get termsSection1Body =>
+      'J\'Donuts is a demo storefront. You can browse the menu, place pretend orders and collect demo points. Do not use the app for real purchases.';
+
+  @override
+  String get termsSection2Title => 'Orders and payments';
+
+  @override
+  String get termsSection2Body =>
+      'Prices are shown in Myanmar kyat for illustration only. No payment is taken and no order reaches a real shop.';
+
+  @override
+  String get termsSection3Title => 'Changes to these terms';
+
+  @override
+  String get termsSection3Body =>
+      'We may update this page as the app changes. The revision date at the top shows when it was last edited.';
+
+  @override
+  String get privacyIntro =>
+      'This page is placeholder copy for the J\'Donuts demo and describes how the app handles data on this device.';
+
+  @override
+  String get privacySection1Title => 'What we store';
+
+  @override
+  String get privacySection1Body =>
+      'Your name, date of birth and phone number stay on this device so the demo can remember your session. The catalog is bundled with the app.';
+
+  @override
+  String get privacySection2Title => 'What we do not collect';
+
+  @override
+  String get privacySection2Body =>
+      'No analytics, advertising identifiers or location data are collected, and the app keeps working with no connection.';
+
+  @override
+  String get privacySection3Title => 'Your choices';
+
+  @override
+  String get privacySection3Body =>
+      'Log out from Settings to clear your session, or uninstall the app to remove every local record.';
 
   @override
   String challengeTapped(Object label) {

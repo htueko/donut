@@ -5,6 +5,7 @@ import '../../../app/motion/app_motion.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_palette.dart';
 import '../../../app/theme/app_spacing.dart';
+import '../../../app/theme/app_typography.dart';
 import '../../../core/formatters/decimal_formatter.dart';
 import '../../../core/widgets/feedback_views.dart';
 import '../../../core/widgets/shimmer_box.dart';
@@ -50,6 +51,7 @@ class _RewardsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final member = data.member;
+    final palette = context.palette;
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -58,9 +60,62 @@ class _RewardsContent extends StatelessWidget {
         AppSpacing.xxl,
       ),
       children: [
-        Text(
-          AppLocalizations.of(context)?.rewardsTitle ?? 'Rewards',
-          style: Theme.of(context).textTheme.headlineMedium,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                'J\' Donuts Rewards',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: AppTypography.h1Weight,
+                    ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
+              ),
+              decoration: BoxDecoration(
+                color: palette.accent,
+                borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)?.rewardsTitle ?? 'Rewards',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: palette.onAccent,
+                          fontWeight: AppTypography.buttonWeight,
+                        ),
+                  ),
+                  const SizedBox(width: AppSpacing.xxs),
+                  Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: palette.onAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '3',
+                        style: TextStyle(
+                          color: palette.accent,
+                          fontSize: 11,
+                          fontWeight: AppTypography.buttonWeight,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: AppSpacing.lg),
         if (member != null) _PointsCard(member: member),

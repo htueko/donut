@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'app_palette.dart';
@@ -185,6 +186,20 @@ abstract final class AppTheme {
         ),
       ),
       splashFactory: InkSparkle.splashFactory,
+      // A slide keeps the page underneath still while the top route leaves.
+      // The platform defaults (fade-forwards on Android, zoom elsewhere) fade
+      // the page below in from zero on pop, which reads as a flash between two
+      // opaque pages.
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.windows: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.linux: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.fuchsia: CupertinoPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 }

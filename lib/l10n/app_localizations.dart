@@ -434,12 +434,6 @@ abstract class AppLocalizations {
   /// **'Social sign-in is coming soon'**
   String get socialLoginComingSoon;
 
-  /// No description provided for @legalComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'This link is not part of the demo'**
-  String get legalComingSoon;
-
   /// No description provided for @loggedOutMessage.
   ///
   /// In en, this message translates to:
@@ -583,6 +577,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get privacyPolicy;
+
+  /// No description provided for @legalUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated 15 November 2026'**
+  String get legalUpdated;
+
+  /// No description provided for @termsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'These terms are placeholder copy for the J\'Donuts demo. They explain the rules for using the app and are not legal advice.'**
+  String get termsIntro;
+
+  /// No description provided for @termsSection1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Using the app'**
+  String get termsSection1Title;
+
+  /// No description provided for @termsSection1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'J\'Donuts is a demo storefront. You can browse the menu, place pretend orders and collect demo points. Do not use the app for real purchases.'**
+  String get termsSection1Body;
+
+  /// No description provided for @termsSection2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders and payments'**
+  String get termsSection2Title;
+
+  /// No description provided for @termsSection2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices are shown in Myanmar kyat for illustration only. No payment is taken and no order reaches a real shop.'**
+  String get termsSection2Body;
+
+  /// No description provided for @termsSection3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes to these terms'**
+  String get termsSection3Title;
+
+  /// No description provided for @termsSection3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We may update this page as the app changes. The revision date at the top shows when it was last edited.'**
+  String get termsSection3Body;
+
+  /// No description provided for @privacyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'This page is placeholder copy for the J\'Donuts demo and describes how the app handles data on this device.'**
+  String get privacyIntro;
+
+  /// No description provided for @privacySection1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'What we store'**
+  String get privacySection1Title;
+
+  /// No description provided for @privacySection1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name, date of birth and phone number stay on this device so the demo can remember your session. The catalog is bundled with the app.'**
+  String get privacySection1Body;
+
+  /// No description provided for @privacySection2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'What we do not collect'**
+  String get privacySection2Title;
+
+  /// No description provided for @privacySection2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics, advertising identifiers or location data are collected, and the app keeps working with no connection.'**
+  String get privacySection2Body;
+
+  /// No description provided for @privacySection3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your choices'**
+  String get privacySection3Title;
+
+  /// No description provided for @privacySection3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out from Settings to clear your session, or uninstall the app to remove every local record.'**
+  String get privacySection3Body;
 
   /// No description provided for @challengeTapped.
   ///

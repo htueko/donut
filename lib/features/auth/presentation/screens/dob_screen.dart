@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/result.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -36,9 +37,9 @@ class _DobScreenState extends ConsumerState<DobScreen> {
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _lastDate,
+      initialDate: _date ?? _lastDate,
       firstDate: _firstDate,
-      lastDate: _lastDate,
+      lastDate: DateTime.now(),
     );
     if (picked != null) {
       setState(() => _date = picked);
@@ -47,6 +48,10 @@ class _DobScreenState extends ConsumerState<DobScreen> {
 
   Future<void> _submit() async {
     if (_submitting || _date == null) {
+      return;
+    }
+    final errorKey = DobValidator.validate(_date).messageKey;
+    if (errorKey != null) {
       return;
     }
     setState(() => _submitting = true);
@@ -83,9 +88,11 @@ class _DobScreenState extends ConsumerState<DobScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
-    final error = _date == null
-        ? null
-        : DobValidator.validate(_date).messageKey;
+    final error = _date == null ? null : DobValidator.validate(_date).messageKey;
+    final monthStr = _date != null ? DateFormat('MMMM').format(_date!) : '';
+    final dayStr = _date != null ? _date!.day.toString() : '';
+    final yearStr = _date != null ? _date!.year.toString() : '';
+
     return Scaffold(
       appBar: AppBar(
         actions: const [
@@ -103,60 +110,63 @@ class _DobScreenState extends ConsumerState<DobScreen> {
             children: [
               const SizedBox(height: AppSpacing.xl),
               Text(
-                l10n?.dobTitle ?? 'When were you born?',
+                'What\'s your date of birth?',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              InkWell(
-                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                onTap: _pickDate,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.lg,
-                  ),
-                  decoration: BoxDecoration(
-                    color: palette.surface,
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                    border: Border.all(
-                      color: _date == null ? palette.border : palette.primary,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: AppTypography.h2Weight,
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.cake_outlined, color: palette.textMuted),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: Text(
-                          _date == null
-                              ? (l10n?.selectDate ?? 'Select date')
-                              : DateFormat.yMMMd(
-                                  Localizations.localeOf(context).toString(),
-                                ).format(_date!),
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      Icon(Icons.chevron_right, color: palette.textMuted),
-                    ],
-                  ),
+              ),
+              const SizedBox(height: AppSpacing.xxl),
+              InkWell(
+                borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+                onTap: _pickDate,
+                child: Column(
+                  children: [
+                    _DobCardField(
+                      label: 'Month',
+                      hintText: 'Select date',
+                      valueText: monthStr,
+                      isFilled: monthStr.isNotEmpty,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _DobCardField(
+                      label: 'Day',
+                      hintText: 'Day',
+                      valueText: dayStr,
+                      isFilled: dayStr.isNotEmpty,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    _DobCardField(
+                      label: 'Year',
+                      hintText: 'Year',
+                      valueText: yearStr,
+                      isFilled: yearStr.isNotEmpty,
+                    ),
+                  ],
                 ),
               ),
               if (error != null) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   _dobErrorMessage(error, l10n),
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium
                       ?.copyWith(color: palette.danger),
                 ),
               ],
-              const SizedBox(height: AppSpacing.lg),
+              const Spacer(),
               PrimaryButton(
                 label: l10n?.continueLabel ?? 'Continue',
                 onPressed: _submit,
-                enabled: _date != null,
+                enabled: _date != null && error == null,
                 loading: _submitting,
               ),
+              const SizedBox(height: AppSpacing.lg),
+              _DisclaimerFooter(
+                onTerms: () => context.push('/legal/terms'),
+                onPrivacy: () => context.push('/legal/privacy'),
+              ),
+              const SizedBox(height: AppSpacing.md),
             ],
           ),
         ),
@@ -172,5 +182,104 @@ class _DobScreenState extends ConsumerState<DobScreen> {
         l10n?.dobTooYoung('13') ?? 'You must be at least 13 years old',
       _ => '',
     };
+  }
+}
+
+class _DobCardField extends StatelessWidget {
+  const _DobCardField({
+    required this.label,
+    required this.hintText,
+    required this.valueText,
+    required this.isFilled,
+  });
+
+  final String label;
+  final String hintText;
+  final String valueText;
+  final bool isFilled;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: palette.surface,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+        border: Border.all(
+          color: isFilled ? palette.primary : palette.border,
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.lg,
+      ),
+      child: Text(
+        isFilled ? valueText : hintText,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: isFilled ? palette.textPrimary : palette.textMuted,
+              fontWeight: isFilled ? AppTypography.subtitleWeight : AppTypography.bodyWeight,
+            ),
+      ),
+    );
+  }
+}
+
+class _DisclaimerFooter extends StatelessWidget {
+  const _DisclaimerFooter({required this.onTerms, required this.onPrivacy});
+
+  final VoidCallback onTerms;
+  final VoidCallback onPrivacy;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Text.rich(
+      TextSpan(
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: palette.textMuted,
+              fontSize: 11,
+            ),
+        children: [
+          const TextSpan(
+            text:
+                'By continuing, you acknowledge that you have read and agree to our ',
+          ),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: GestureDetector(
+              onTap: onTerms,
+              child: Text(
+                'Terms of Use',
+                style: TextStyle(
+                  color: palette.primary,
+                  fontSize: 11,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+          const TextSpan(text: ' and '),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: GestureDetector(
+              onTap: onPrivacy,
+              child: Text(
+                'Privacy Policy',
+                style: TextStyle(
+                  color: palette.primary,
+                  fontSize: 11,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+          const TextSpan(text: '.'),
+        ],
+      ),
+      textAlign: TextAlign.center,
+    );
   }
 }

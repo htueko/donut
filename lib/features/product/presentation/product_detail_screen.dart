@@ -6,7 +6,6 @@ import '../../../app/motion/app_motion.dart';
 import '../../../app/theme/app_palette.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../app/theme/app_typography.dart';
-import '../../../core/formatters/percent_formatter.dart';
 import '../../../core/formatters/price_mmk_formatter.dart';
 import '../../../core/result.dart';
 import '../../../core/widgets/feedback_views.dart';
@@ -14,7 +13,6 @@ import '../../../core/widgets/shimmer_box.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../catalog/data/catalog_providers.dart';
 import '../../catalog/domain/product.dart';
-import '../../home/presentation/widgets/product_image.dart';
 import 'product_providers.dart';
 import 'widgets/quantity_stepper.dart';
 
@@ -99,6 +97,8 @@ class _ProductDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final locale = Localizations.localeOf(context).toString();
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -107,66 +107,134 @@ class _ProductDetail extends StatelessWidget {
         AppSpacing.xxl,
       ),
       children: [
-        Hero(
-          tag: 'product-${product.id}',
-          child: ProductImage(
-            imageUrl: product.imageUrl,
-            size: AppSpacing.detailImageSize,
-            isNew: product.isNew,
+        // Main Product White Card Container
+        Container(
+          decoration: BoxDecoration(
+            color: palette.surface,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+            border: Border.all(color: palette.border),
           ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        Text(
-          l10n?.productCode(product.code) ?? 'Code ${product.code}',
-          style: Theme.of(context).textTheme.bodySmall
-              ?.copyWith(color: context.palette.textSecondary),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(product.name, style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: AppSpacing.sm),
-        PriceText(amount: product.priceMmk),
-        if (product.discountPercent != null) ...[
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            l10n?.discountOff(
-                  PercentFormatter.format(
-                    product.discountPercent!,
-                    locale: Localizations.localeOf(context).toString(),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n?.productCode(product.code) ?? 'Code ${product.code}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: palette.textSecondary,
+                          fontWeight: AppTypography.captionWeight,
+                        ),
                   ),
-                ) ??
-                '${product.discountPercent}% off',
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: context.palette.primary,
-              fontWeight: AppTypography.h2Weight,
-            ),
+                  if (product.isNew)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xxs,
+                      ),
+                      decoration: BoxDecoration(
+                        color: palette.accent,
+                        borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                      ),
+                      child: Text(
+                        l10n?.newBadge ?? 'New',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: palette.onAccent,
+                              fontWeight: AppTypography.buttonWeight,
+                              fontSize: 10,
+                            ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                product.name,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: AppTypography.h1Weight,
+                    ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                PriceMmkFormatter.format(
+                  product.priceMmk,
+                  locale: locale,
+                  unit: l10n?.mmk ?? 'MMK',
+                ),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: palette.textPrimary,
+                      fontWeight: AppTypography.h2Weight,
+                    ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Center(
+                child: Hero(
+                  tag: 'product-${product.id}',
+                  child: Image.network(
+                    product.imageUrl,
+                    height: 200,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, _, _) => Image.asset(
+                      'assets/seed/images/donut_coconut.png',
+                      height: 200,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Center(
+                child: QuantityStepper(
+                  quantity: quantity,
+                  onChanged: onQuantityChanged,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
         const SizedBox(height: AppSpacing.xl),
-        Text(
-          AppLocalizations.of(context)?.whatsThis ?? 'What\'s this?',
-          style: Theme.of(context).textTheme.titleMedium,
+        // What's this? Section with Green ? icon
+        Row(
+          children: [
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: palette.success,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  '?',
+                  style: TextStyle(
+                    color: palette.onPrimary,
+                    fontSize: 12,
+                    fontWeight: AppTypography.buttonWeight,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Text(
+              l10n?.whatsThis ?? 'What\'s this?',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: AppTypography.h2Weight,
+                  ),
+            ),
+          ],
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
           product.description.isEmpty
-              ? (AppLocalizations.of(context)?.emptyGeneric ??
-                    'Nothing here yet')
+              ? (l10n?.emptyGeneric ?? 'Nothing here yet')
               : product.description,
-          style: Theme.of(context).textTheme.bodyMedium
-              ?.copyWith(color: context.palette.textSecondary),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: palette.textSecondary,
+                height: 1.5,
+              ),
         ),
-        const SizedBox(height: AppSpacing.xl),
-        Row(
-          children: [
-            Text(
-              AppLocalizations.of(context)?.quantity ?? 'Quantity',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const Spacer(),
-            QuantityStepper(quantity: quantity, onChanged: onQuantityChanged),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: AppSpacing.xxl),
         _AddToCartBar(product: product, quantity: quantity),
       ],
     );
@@ -183,39 +251,34 @@ class _AddToCartBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final total = product.priceMmk * quantity;
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final locale = Localizations.localeOf(context).toString();
+    final formattedTotal = PriceMmkFormatter.format(
+      total,
+      locale: locale,
+      unit: l10n?.mmk ?? 'MMK',
+    );
+
     return Column(
       children: [
         Row(
           children: [
             Text(
               l10n?.total ?? 'Total',
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: context.palette.textSecondary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: palette.textSecondary,
+                  ),
             ),
             const Spacer(),
             AnimatedSwitcher(
               duration: motionScale(context, AppMotion.fast),
-              transitionBuilder: (child, animation) => FadeTransition(
-                opacity: animation,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 0.3),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: child,
-                ),
-              ),
               child: Text(
-                PriceMmkFormatter.format(
-                  total,
-                  locale: Localizations.localeOf(context).toString(),
-                  unit: l10n?.mmk ?? 'MMK',
-                ),
+                formattedTotal,
                 key: ValueKey<int>(total),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: context.palette.textPrimary,
-                  fontWeight: AppTypography.h1Weight,
-                ),
+                      color: palette.textPrimary,
+                      fontWeight: AppTypography.h1Weight,
+                    ),
               ),
             ),
           ],
@@ -225,8 +288,19 @@ class _AddToCartBar extends StatelessWidget {
           width: double.infinity,
           child: FilledButton(
             onPressed: () => _showFeedback(context),
+            style: FilledButton.styleFrom(
+              backgroundColor: palette.primary,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xl,
+                vertical: AppSpacing.md,
+              ),
+            ),
             child: Text(
-              AppLocalizations.of(context)?.addToCart ?? 'Add to cart',
+              l10n?.addToCart ?? 'Add to cart',
+              style: AppTypography.button.copyWith(
+                color: palette.onPrimary,
+                fontWeight: AppTypography.buttonWeight,
+              ),
             ),
           ),
         ),

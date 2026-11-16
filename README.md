@@ -67,8 +67,9 @@ back arrow returns to the previous step **keeping what was already typed**.
 Register: Phone → OTP → Name → DOB → Welcome → Home.
 Login: Phone → OTP → Home. An unknown number shows an inline message plus a link
 to register. A session survives relaunch; logging out clears it, and Settings has
-the log-out row. Google/Apple/Facebook and Terms/Privacy show placeholder
-snackbars.
+the log-out row. Google/Apple/Facebook still show placeholder snackbars, while
+Terms/Privacy open full pages with placeholder copy (`/legal/terms`,
+`/legal/privacy`).
 
 ### Task 2 — Home + product detail, offline-first
 
@@ -143,7 +144,7 @@ lib/
   features/
     auth/     domain/ data/ presentation/
     catalog/  domain/ data/ presentation/
-    home/ product/ rewards/ cart/ orders/ notifications/ settings/
+    home/ product/ rewards/ cart/ orders/ notifications/ settings/ legal/
   l10n/                         # ARB (en + my) and generated localizations
 mock_server/                    # optional Node /v1 API
 test/                           # mirrors lib
@@ -193,9 +194,9 @@ defaults to review against it.
   `flutter build ios --simulator` on a Mac is expected to work, but it is
   unverified.
 - The mock server is optional and the app is complete without it.
-- Social login and legal links are placeholders by design.
-- `lib/l10n/app_my.arb` is fully translated (bonus per the brief), but there is no
-  language switcher yet, so the app runs in English.
+- Social login is a placeholder by design; Terms/Privacy render placeholder copy.
+- `lib/l10n/app_my.arb` is fully translated (bonus per the brief), and Settings
+  can switch between English and Burmese.
 
 ## Submission checklist
 

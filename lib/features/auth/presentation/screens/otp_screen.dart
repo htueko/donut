@@ -9,7 +9,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/motion/app_motion.dart';
 import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/result.dart';
+import '../../../../core/widgets/primary_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/app_user.dart';
 import '../../domain/otp_validator.dart';
@@ -247,14 +249,17 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
               Text(
                 l10n?.verifyTitle ?? 'Verify your number',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: AppTypography.h2Weight,
+                    ),
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                l10n?.verifyHint('+95 ${phone ?? ''}') ??
-                    'Enter the 6-digit code sent to +95 ${phone ?? ''}',
+                'We\'ve sent 6 digit OTP to +95${phone ?? ''}',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.palette.textSecondary,
+                    ),
               ),
               const SizedBox(height: AppSpacing.xl),
               AnimatedBuilder(
@@ -289,23 +294,22 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                             ?.copyWith(color: context.palette.danger),
                       ),
               ),
-              const SizedBox(height: AppSpacing.lg),
-              FilledButton(
-                onPressed: _codeComplete && !_locked && !_submitting
-                    ? _submit
-                    : null,
-                child: _submitting
-                    ? SizedBox.square(
-                        dimension:
-                            AppSpacing.sm + AppSpacing.sm + AppSpacing.xs,
-                        child: CircularProgressIndicator(
-                          strokeWidth: AppSpacing.hairlineWidth,
-                          color: context.palette.onPrimary,
-                        ),
+              const SizedBox(height: AppSpacing.sm),
+              Center(
+                child: _secondsLeft > 0
+                    ? Text(
+                        l10n?.resendIn(_formatClock()) ??
+                            'Resend in ${_formatClock()}',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: context.palette.textSecondary,
+                            ),
                       )
-                    : Text(l10n?.continueLabel ?? 'Continue'),
+                    : TextButton(
+                        onPressed: _resend,
+                        child: Text(l10n?.resend ?? 'Resend'),
+                      ),
               ),
-              const SizedBox(height: AppSpacing.md),
               if (_errorKey == 'phone_not_registered') ...[
                 const SizedBox(height: AppSpacing.sm),
                 Center(
@@ -318,20 +322,21 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                   ),
                 ),
               ],
-              const SizedBox(height: AppSpacing.md),
-              Center(
-                child: _secondsLeft > 0
-                    ? Text(
-                        l10n?.resendIn(_formatClock()) ??
-                            'Resend in ${_formatClock()}',
-                        style: Theme.of(context).textTheme.bodySmall
-                            ?.copyWith(color: context.palette.textMuted),
-                      )
-                    : TextButton(
-                        onPressed: _resend,
-                        child: Text(l10n?.resend ?? 'Resend'),
-                      ),
+              const Spacer(),
+              PrimaryButton(
+                label: l10n?.continueLabel ?? 'Continue',
+                onPressed: _codeComplete && !_locked && !_submitting
+                    ? _submit
+                    : null,
+                enabled: _codeComplete && !_locked,
+                loading: _submitting,
               ),
+              const SizedBox(height: AppSpacing.lg),
+              _DisclaimerFooter(
+                onTerms: () => context.push('/legal/terms'),
+                onPrivacy: () => context.push('/legal/privacy'),
+              ),
+              const SizedBox(height: AppSpacing.md),
             ],
           ),
         ),
@@ -343,5 +348,64 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
     final minutes = (_secondsLeft ~/ 60).toString().padLeft(2, '0');
     final seconds = (_secondsLeft % 60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
+  }
+}
+
+class _DisclaimerFooter extends StatelessWidget {
+  const _DisclaimerFooter({required this.onTerms, required this.onPrivacy});
+
+  final VoidCallback onTerms;
+  final VoidCallback onPrivacy;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Text.rich(
+      TextSpan(
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: palette.textMuted,
+              fontSize: 11,
+            ),
+        children: [
+          const TextSpan(
+            text:
+                'By continuing, you acknowledge that you have read and agree to our ',
+          ),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: GestureDetector(
+              onTap: onTerms,
+              child: Text(
+                'Terms of Use',
+                style: TextStyle(
+                  color: palette.primary,
+                  fontSize: 11,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+          const TextSpan(text: ' and '),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: GestureDetector(
+              onTap: onPrivacy,
+              child: Text(
+                'Privacy Policy',
+                style: TextStyle(
+                  color: palette.primary,
+                  fontSize: 11,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+          const TextSpan(text: '.'),
+        ],
+      ),
+      textAlign: TextAlign.center,
+    );
   }
 }

@@ -88,13 +88,15 @@ class _PointsRingState extends State<PointsRing>
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontSize: AppSpacing.pointsRingFontSize,
                       fontWeight: AppTypography.h1Weight,
-                      color: palette.textPrimary,
+                      color: palette.secondary,
                     ),
                   ),
                   Text(
                     widget.centerLabel,
-                    style: Theme.of(context).textTheme.labelSmall
-                        ?.copyWith(color: palette.textSecondary),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: palette.secondary,
+                          fontWeight: AppTypography.subtitleWeight,
+                        ),
                   ),
                 ],
               ),

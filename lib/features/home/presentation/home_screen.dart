@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_palette.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/formatters/decimal_formatter.dart';
 import '../../../../core/widgets/feedback_views.dart';
 import '../../../../core/widgets/shimmer_box.dart';
@@ -80,7 +81,7 @@ class _HomeContent extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           ProductRow(
-            title: l10n?.popular ?? 'Popular',
+            title: '${l10n?.popular ?? 'Popular'} 🔥',
             products: data.productsInSection(CatalogSection.popular),
             emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
           ),
@@ -108,56 +109,71 @@ class _MemberHeader extends StatelessWidget {
     final progress = TierProgress(member.tier, member.points);
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
-    final points = DecimalFormatter.format(member.points, locale: locale);
     final toNext = DecimalFormatter.format(
       progress.pointsToNext,
       locale: locale,
     );
     final nextTier =
         progress.nextTier?.localizedLabel(l10n) ?? l10n?.max ?? 'max';
-    final progressText =
-        l10n?.memberProgress(points, nextTier, toNext) ??
-        '$points pts · $toNext to $nextTier';
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
         children: [
-          MemberAvatar(imageUrl: member.photoUrl),
-          const SizedBox(width: AppSpacing.md),
+          MemberAvatar(imageUrl: member.photoUrl, size: 44),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  member.name,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: AppSpacing.xxs),
                 Row(
                   children: [
+                    Flexible(
+                      child: Text(
+                        member.name,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: AppTypography.h2Weight,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
                     TierBadge(
                       tierLabel: member.tier.localizedLabel(l10n),
                       color: AppColors.tierColor(member.tier.name),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        progressText,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelSmall
-                            ?.copyWith(color: context.palette.textSecondary),
-                      ),
-                    ),
                   ],
+                ),
+                const SizedBox(height: AppSpacing.xxs),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                    vertical: AppSpacing.xxs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: palette.surface,
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                    border: Border.all(color: palette.border),
+                  ),
+                  child: Text(
+                    '$toNext pts left to $nextTier',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: palette.textSecondary,
+                          fontSize: 10,
+                        ),
+                  ),
                 ),
               ],
             ),
           ),
+          const SizedBox(width: AppSpacing.xs),
           Badge(
             label: Text('${member.notificationsCount}'),
+            backgroundColor: palette.secondary,
             child: IconButton(
               onPressed: () => context.push('/notifications'),
               icon: const Icon(Icons.notifications_outlined),

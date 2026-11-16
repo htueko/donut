@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/motion/app_motion.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -15,15 +16,23 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-  static const _donuts = <String>[
-    'donut_coconut.png',
-    'donut_strawberry.png',
-    'donut_chocolate.png',
-    'donut_matcha.png',
-    'donut_caramel.png',
-    'donut_mango.png',
-    'donut_blueberry.png',
-    'donut_redvelvet.png',
+  static const _donuts = <_DonutTileData>[
+    _DonutTileData(
+      asset: 'assets/seed/images/donut_coconut.png',
+      color: Color(0xFFE3F2FD),
+    ),
+    _DonutTileData(
+      asset: 'assets/seed/images/donut_strawberry.png',
+      color: Color(0xFFFCE4EC),
+    ),
+    _DonutTileData(
+      asset: 'assets/seed/images/donut_chocolate.png',
+      color: Color(0xFFFFF3E0),
+    ),
+    _DonutTileData(
+      asset: 'assets/seed/images/donut_matcha.png',
+      color: Color(0xFFFFFDE7),
+    ),
   ];
 
   late final AnimationController _controller = AnimationController(
@@ -70,24 +79,38 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             children: [
               const SizedBox(height: AppSpacing.xl),
               Expanded(
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: AppSpacing.md,
-                  crossAxisSpacing: AppSpacing.md,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    for (var i = 0; i < _donuts.length; i++)
-                      FadeTransition(
-                        opacity: _fade(0.05 + i * 0.05),
-                        child: SlideTransition(
-                          position: _rise(0.05 + i * 0.05),
-                          child: Image.asset(
-                            'assets/seed/images/${_donuts[i]}',
-                            filterQuality: FilterQuality.medium,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: AppSpacing.lg,
+                    crossAxisSpacing: AppSpacing.lg,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      for (var i = 0; i < _donuts.length; i++)
+                        FadeTransition(
+                          opacity: _fade(0.08 + i * 0.1),
+                          child: SlideTransition(
+                            position: _rise(0.08 + i * 0.1),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: _donuts[i].color,
+                                borderRadius: BorderRadius.circular(
+                                  AppSpacing.radiusLg,
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(AppSpacing.lg),
+                              child: Center(
+                                child: Image.asset(
+                                  _donuts[i].asset,
+                                  filterQuality: FilterQuality.medium,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               FadeTransition(
@@ -97,7 +120,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Text(
                     l10n?.welcomeTitle ?? 'Welcome to the world of J\'donuts',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: AppTypography.h1Weight,
+                        ),
                   ),
                 ),
               ),
@@ -119,4 +144,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       ),
     );
   }
+}
+
+class _DonutTileData {
+  const _DonutTileData({required this.asset, required this.color});
+
+  final String asset;
+  final Color color;
 }

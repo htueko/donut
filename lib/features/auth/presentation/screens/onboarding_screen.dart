@@ -28,16 +28,23 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     duration: AppMotion.ambient,
   );
 
+  bool _entranceStarted = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!MediaQuery.disableAnimationsOf(context)) {
-      _drift.repeat();
+      if (!_drift.isAnimating) {
+        _drift.repeat();
+      }
     } else {
       _drift.stop();
       _drift.value = 1;
     }
-    _entrance.forward(from: 0);
+    if (!_entranceStarted) {
+      _entranceStarted = true;
+      _entrance.forward(from: 0);
+    }
   }
 
   @override
@@ -74,6 +81,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
     return Scaffold(
       body: SafeArea(
         child: AnimatedBuilder(
@@ -100,10 +108,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             style: Theme.of(context).textTheme.headlineMedium
                                 ?.copyWith(
                                   fontSize: AppTypography.onboardingTitleSize,
+                                  fontWeight: AppTypography.h1Weight,
                                 ),
                           ),
                         ),
-                        const Spacer(flex: 6),
+                        const Spacer(flex: 5),
                         _FadeRise(
                           fade: _fade(0.55, 0.9),
                           rise: _rise(0.55, 0.9),
@@ -116,11 +125,35 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         _FadeRise(
                           fade: _fade(0.65, 1),
                           rise: _rise(0.65, 1),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: TextButton(
-                              onPressed: () => context.go('/login/phone'),
-                              child: Text(l10n?.logIn ?? 'Log in'),
+                          child: GestureDetector(
+                            onTap: () => context.go('/login/phone'),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: AppSpacing.xs,
+                              ),
+                              child: Text.rich(
+                                TextSpan(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: palette.textSecondary,
+                                      ),
+                                  children: [
+                                    const TextSpan(
+                                      text: 'Already have an account? ',
+                                    ),
+                                    TextSpan(
+                                      text: l10n?.logIn ?? 'Log In',
+                                      style: TextStyle(
+                                        color: palette.primary,
+                                        fontWeight: AppTypography.h2Weight,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
@@ -137,9 +170,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           fade: _fade(0.85, 1),
                           rise: _rise(0.85, 1),
                           child: _LegalLinks(
-                            onComingSoon: () => _showComingSoon(
-                              l10n?.legalComingSoon ?? 'Not part of the demo',
-                            ),
+                            onTerms: () => context.push('/legal/terms'),
+                            onPrivacy: () => context.push('/legal/privacy'),
                           ),
                         ),
                         const SizedBox(height: AppSpacing.md),
@@ -154,30 +186,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       ),
     );
   }
-}
-
-/// Fixed geometry for the decorative donut illustration.
-abstract final class _Layout {
-  static const double blobOneTop = 40;
-  static const double blobOneLeft = 24;
-  static const double blobOneSize = 88;
-  static const double blobOneFloatY = 10;
-  static const double blobOneFloatX = 8;
-
-  static const double blobTwoTop = 120;
-  static const double blobTwoRight = 16;
-  static const double blobTwoSize = 120;
-  static const double blobTwoFloatY = 12;
-  static const double blobTwoFloatX = 8;
-
-  static const double blobThreeTop = 220;
-  static const double blobThreeLeft = 60;
-  static const double blobThreeSize = 56;
-  static const double blobThreeFloatY = 10;
-  static const double blobThreeFloatX = 10;
-
-  static const double heroImageHeight = 220;
-  static const double blobHoleRatio = 0.4;
 }
 
 class _FadeRise extends StatelessWidget {
@@ -213,38 +221,47 @@ class _Illustration extends StatelessWidget {
         final t = drift.value * math.pi * 2;
         return Stack(
           children: [
+            // Floating background blobs with donut images inside
             Positioned(
-              top: _Layout.blobOneTop + math.sin(t) * _Layout.blobOneFloatY,
-              left: _Layout.blobOneLeft + math.cos(t) * _Layout.blobOneFloatX,
-              child: _DonutBlob(
-                color: context.palette.warning,
-                size: _Layout.blobOneSize,
+              top: 30 + math.sin(t) * 10,
+              left: 20 + math.cos(t) * 8,
+              child: const _DonutFloatCard(
+                color: Color(0xFFFFEBF0),
+                imageAsset: 'assets/seed/images/donut_strawberry.png',
+                size: 90,
               ),
             ),
             Positioned(
-              top: _Layout.blobTwoTop + math.cos(t) * _Layout.blobTwoFloatY,
-              right: _Layout.blobTwoRight + math.sin(t) * _Layout.blobTwoFloatX,
-              child: _DonutBlob(
-                color: context.palette.primary,
-                size: _Layout.blobTwoSize,
+              top: 100 + math.cos(t) * 12,
+              right: 16 + math.sin(t) * 8,
+              child: const _DonutFloatCard(
+                color: Color(0xFFE8F7FB),
+                imageAsset: 'assets/seed/images/donut_chocolate.png',
+                size: 110,
               ),
             ),
             Positioned(
-              top:
-                  _Layout.blobThreeTop +
-                  math.sin(t + 1) * _Layout.blobThreeFloatY,
-              left:
-                  _Layout.blobThreeLeft +
-                  math.cos(t + 1) * _Layout.blobThreeFloatX,
-              child: _DonutBlob(
-                color: context.palette.success,
-                size: _Layout.blobThreeSize,
+              top: 200 + math.sin(t + 1) * 10,
+              left: 50 + math.cos(t + 1) * 10,
+              child: const _DonutFloatCard(
+                color: Color(0xFFFFF4E5),
+                imageAsset: 'assets/seed/images/donut_matcha.png',
+                size: 70,
+              ),
+            ),
+            Positioned(
+              top: 190 + math.cos(t + 1.5) * 8,
+              right: 40 + math.sin(t + 1.5) * 8,
+              child: const _DonutFloatCard(
+                color: Color(0xFFF3E8FF),
+                imageAsset: 'assets/seed/images/donut_mango.png',
+                size: 65,
               ),
             ),
             Center(
               child: Image.asset(
                 'assets/seed/images/donut_coconut.png',
-                height: _Layout.heroImageHeight,
+                height: 220,
                 filterQuality: FilterQuality.medium,
               ),
             ),
@@ -255,10 +272,15 @@ class _Illustration extends StatelessWidget {
   }
 }
 
-class _DonutBlob extends StatelessWidget {
-  const _DonutBlob({required this.color, required this.size});
+class _DonutFloatCard extends StatelessWidget {
+  const _DonutFloatCard({
+    required this.color,
+    required this.imageAsset,
+    required this.size,
+  });
 
   final Color color;
+  final String imageAsset;
   final double size;
 
   @override
@@ -266,20 +288,19 @@ class _DonutBlob extends StatelessWidget {
     return Container(
       width: size,
       height: size,
+      padding: EdgeInsets.all(size * 0.12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.9),
+        color: color,
         shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: size * _Layout.blobHoleRatio,
-          height: size * _Layout.blobHoleRatio,
-          decoration: BoxDecoration(
-            color: context.palette.background,
-            shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.5),
+            blurRadius: 12,
+            spreadRadius: 2,
           ),
-        ),
+        ],
       ),
+      child: Image.asset(imageAsset, filterQuality: FilterQuality.medium),
     );
   }
 }
@@ -303,15 +324,22 @@ class _SocialRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _SocialButton(icon: const Text('G'), onTap: onComingSoon),
-          const SizedBox(width: AppSpacing.md),
           _SocialButton(
-            icon: Icon(Icons.apple, color: context.palette.textPrimary),
+            icon: const SizedBox(
+              width: 22,
+              height: 22,
+              child: CustomPaint(painter: _GoogleIconPainter()),
+            ),
             onTap: onComingSoon,
           ),
           const SizedBox(width: AppSpacing.md),
           _SocialButton(
-            icon: Icon(Icons.facebook, color: context.palette.textPrimary),
+            icon: Icon(Icons.apple, color: context.palette.textPrimary, size: 24),
+            onTap: onComingSoon,
+          ),
+          const SizedBox(width: AppSpacing.md),
+          _SocialButton(
+            icon: const Icon(Icons.facebook, color: Color(0xFF1877F2), size: 24),
             onTap: onComingSoon,
           ),
         ],
@@ -333,32 +361,126 @@ class _SocialButton extends StatelessWidget {
       color: palette.surface,
       shape: CircleBorder(side: BorderSide(color: palette.border)),
       clipBehavior: Clip.antiAlias,
-      child: IconButton(onPressed: onTap, icon: icon),
+      elevation: 1,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: icon,
+        ),
+      ),
     );
   }
 }
 
-class _LegalLinks extends StatelessWidget {
-  const _LegalLinks({required this.onComingSoon});
+class _GoogleIconPainter extends CustomPainter {
+  const _GoogleIconPainter();
 
-  final VoidCallback onComingSoon;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
+    final radius = size.width / 2;
+    final stroke = size.width * 0.22;
+    final rect = Rect.fromCircle(center: center, radius: radius - stroke / 2);
+
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = stroke
+      ..strokeCap = StrokeCap.butt;
+
+    // Red (top)
+    paint.color = const Color(0xFFEA4335);
+    canvas.drawArc(rect, -math.pi * 0.75, math.pi * 0.5, false, paint);
+
+    // Yellow (left)
+    paint.color = const Color(0xFFFBBC05);
+    canvas.drawArc(rect, math.pi * 0.75, math.pi * 0.5, false, paint);
+
+    // Green (bottom)
+    paint.color = const Color(0xFF34A853);
+    canvas.drawArc(rect, math.pi * 0.25, math.pi * 0.5, false, paint);
+
+    // Blue (right)
+    paint.color = const Color(0xFF4285F4);
+    canvas.drawArc(rect, -math.pi * 0.25, math.pi * 0.5, false, paint);
+
+    final linePaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = stroke
+      ..strokeCap = StrokeCap.square;
+    canvas.drawLine(
+      center,
+      Offset(center.dx + radius - stroke / 2, center.dy),
+      linePaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _LegalLinks extends StatelessWidget {
+  const _LegalLinks({required this.onTerms, required this.onPrivacy});
+
+  final VoidCallback onTerms;
+  final VoidCallback onPrivacy;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          onPressed: onComingSoon,
-          child: Text(l10n?.termsOfUse ?? 'Terms of Use'),
+    final palette = context.palette;
+    final termsText = l10n?.termsOfUse ?? 'Terms of Use';
+    final privacyText = l10n?.privacyPolicy ?? 'Privacy Policy';
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+      child: Text.rich(
+        TextSpan(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: palette.textMuted,
+                fontSize: 11,
+              ),
+          children: [
+            const TextSpan(
+              text:
+                  'By continuing, you acknowledge that you have read and agree to our ',
+            ),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: GestureDetector(
+                onTap: onTerms,
+                child: Text(
+                  termsText,
+                  style: TextStyle(
+                    color: palette.primary,
+                    fontSize: 11,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+            const TextSpan(text: ' and '),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: GestureDetector(
+                onTap: onPrivacy,
+                child: Text(
+                  privacyText,
+                  style: TextStyle(
+                    color: palette.primary,
+                    fontSize: 11,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+            const TextSpan(text: '.'),
+          ],
         ),
-        Text('·', style: TextStyle(color: context.palette.textMuted)),
-        TextButton(
-          onPressed: onComingSoon,
-          child: Text(l10n?.privacyPolicy ?? 'Privacy Policy'),
-        ),
-      ],
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }

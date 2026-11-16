@@ -12,6 +12,7 @@ import '../features/auth/presentation/screens/welcome_screen.dart';
 import '../features/cart/presentation/cart_screen.dart';
 import '../features/home/presentation/catalog_refresh_listener.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/legal/presentation/legal_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/orders/presentation/orders_screen.dart';
 import '../features/product/presentation/product_detail_screen.dart';
@@ -44,7 +45,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           location.startsWith('/onboarding') ||
           location.startsWith('/login') ||
           location.startsWith('/register');
-      if (!loggedIn && !inAuthFlow) {
+      // Legal pages are readable before sign-in and from inside the app, so
+      // they sit outside both guards.
+      final isLegal = location.startsWith('/legal');
+      if (!loggedIn && !inAuthFlow && !isLegal) {
         return '/onboarding';
       }
       if (loggedIn && inAuthFlow && location != '/welcome') {
@@ -84,6 +88,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/welcome',
         builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: '/legal/terms',
+        builder: (context, state) =>
+            const LegalScreen(document: LegalDocument.terms),
+      ),
+      GoRoute(
+        path: '/legal/privacy',
+        builder: (context, state) =>
+            const LegalScreen(document: LegalDocument.privacy),
       ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
