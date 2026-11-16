@@ -14,7 +14,6 @@ import '../features/home/presentation/catalog_refresh_listener.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/legal/presentation/legal_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
-import '../features/orders/presentation/orders_screen.dart';
 import '../features/product/presentation/product_detail_screen.dart';
 import '../features/rewards/presentation/rewards_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
@@ -110,10 +109,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/rewards',
             builder: (context, state) => const RewardsScreen(),
-          ),
-          GoRoute(
-            path: '/orders',
-            builder: (context, state) => const OrdersScreen(),
           ),
           GoRoute(
             path: '/cart',

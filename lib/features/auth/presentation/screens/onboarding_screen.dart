@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/motion/app_motion.dart';
@@ -82,9 +83,19 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
-    return Scaffold(
-      body: SafeArea(
-        child: AnimatedBuilder(
+    final topPadding = MediaQuery.paddingOf(context).top;
+    final bottomPadding = MediaQuery.paddingOf(context).bottom;
+    final overlayStyle = Theme.of(context).brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle.copyWith(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: overlayStyle.statusBarIconBrightness,
+        statusBarBrightness: overlayStyle.statusBarBrightness,
+      ),
+      child: Scaffold(
+        body: AnimatedBuilder(
           animation: _entrance,
           builder: (context, _) {
             return Stack(
@@ -92,8 +103,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 Positioned.fill(child: _Illustration(drift: _drift)),
                 Positioned.fill(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xl,
+                    padding: EdgeInsets.fromLTRB(
+                      AppSpacing.xl,
+                      topPadding,
+                      AppSpacing.xl,
+                      AppSpacing.md + bottomPadding,
                     ),
                     child: Column(
                       children: [
@@ -174,7 +188,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             onPrivacy: () => context.push('/legal/privacy'),
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.md),
                       ],
                     ),
                   ),

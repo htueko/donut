@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,27 +31,36 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(catalogDataProvider);
     final online = ref.watch(onlineStatusProvider).valueOrNull ?? true;
-    return Scaffold(
-      body: Column(
-        children: [
-          if (!online)
-            OfflineBanner(
-              message:
-                  AppLocalizations.of(context)?.offline ?? 'You\'re offline',
-            ),
-          Expanded(
-            child: catalog.when(
-              data: (data) => _HomeContent(data: data),
-              loading: () => const _HomeSkeleton(),
-              error: (error, _) => ErrorRetryView(
-                message:
-                    AppLocalizations.of(context)?.errorGeneric ??
-                    'Something went wrong',
-                onRetry: () => ref.refresh(catalogDataProvider),
+    final overlayStyle = Theme.of(context).brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle.copyWith(statusBarColor: Colors.transparent),
+      child: Scaffold(
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              if (!online)
+                OfflineBanner(
+                  message:
+                      AppLocalizations.of(context)?.offline ?? 'You\'re offline',
+                ),
+              Expanded(
+                child: catalog.when(
+                  data: (data) => _HomeContent(data: data),
+                  loading: () => const _HomeSkeleton(),
+                  error: (error, _) => ErrorRetryView(
+                    message:
+                        AppLocalizations.of(context)?.errorGeneric ??
+                        'Something went wrong',
+                    onRetry: () => ref.refresh(catalogDataProvider),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -171,12 +181,16 @@ class _MemberHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.xs),
-          Badge(
-            label: Text('${member.notificationsCount}'),
-            backgroundColor: palette.secondary,
-            child: IconButton(
-              onPressed: () => context.push('/notifications'),
-              icon: const Icon(Icons.notifications_outlined),
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.xs),
+            child: Badge(
+              label: Text('${member.notificationsCount}'),
+              backgroundColor: palette.secondary,
+              child: IconButton(
+                onPressed: () => context.push('/notifications'),
+                icon: const Icon(Icons.notifications_outlined),
+                visualDensity: VisualDensity.compact,
+              ),
             ),
           ),
         ],

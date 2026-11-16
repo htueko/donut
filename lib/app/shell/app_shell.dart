@@ -12,7 +12,6 @@ class AppShell extends StatelessWidget {
   static const _tabs = <String>[
     '/home',
     '/rewards',
-    '/orders',
     '/cart',
     '/settings',
   ];
@@ -39,11 +38,6 @@ class AppShell extends StatelessWidget {
             icon: const _RewardsTabIcon(selected: false),
             selectedIcon: const _RewardsTabIcon(selected: true),
             label: l10n?.rewardsTitle ?? 'Rewards',
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.receipt_long_outlined),
-            selectedIcon: const Icon(Icons.receipt_long),
-            label: l10n?.orders ?? 'Orders',
           ),
           NavigationDestination(
             icon: const Icon(Icons.shopping_bag_outlined),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/motion/app_motion.dart';
@@ -28,15 +29,24 @@ class RewardsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(catalogDataProvider);
-    return Scaffold(
-      body: catalog.when(
-        data: (data) => _RewardsContent(data: data),
-        loading: () => const _RewardsSkeleton(),
-        error: (error, _) => ErrorRetryView(
-          message:
-              AppLocalizations.of(context)?.errorGeneric ??
-              'Something went wrong',
-          onRetry: () => ref.refresh(catalogDataProvider),
+    final overlayStyle = Theme.of(context).brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle.copyWith(statusBarColor: Colors.transparent),
+      child: Scaffold(
+        body: SafeArea(
+          bottom: false,
+          child: catalog.when(
+            data: (data) => _RewardsContent(data: data),
+            loading: () => const _RewardsSkeleton(),
+            error: (error, _) => ErrorRetryView(
+              message:
+                  AppLocalizations.of(context)?.errorGeneric ??
+                  'Something went wrong',
+              onRetry: () => ref.refresh(catalogDataProvider),
+            ),
+          ),
         ),
       ),
     );
