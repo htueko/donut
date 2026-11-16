@@ -1,0 +1,312 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_palette.dart';
+import '../../../../app/theme/app_spacing.dart';
+import '../../../../app/theme/app_typography.dart';
+import '../../../../core/formatters/decimal_formatter.dart';
+import '../../../../core/widgets/feedback_views.dart';
+import '../../../../core/widgets/shimmer_box.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../catalog/data/catalog_providers.dart';
+import '../../catalog/domain/catalog_data.dart';
+import '../../catalog/domain/catalog_enums.dart';
+import '../../catalog/domain/member.dart';
+import '../../catalog/domain/shop.dart';
+import '../../catalog/domain/tier_progress.dart';
+import '../../catalog/presentation/tier_label.dart';
+import 'widgets/banner_carousel.dart';
+import 'widgets/member_avatar.dart';
+import 'widgets/product_row.dart';
+import 'widgets/product_tile.dart';
+import 'widgets/shop_card.dart';
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final catalog = ref.watch(catalogDataProvider);
+    final online = ref.watch(onlineStatusProvider).valueOrNull ?? true;
+    final overlayStyle = Theme.of(context).brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle.copyWith(statusBarColor: Colors.transparent),
+      child: Scaffold(
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              if (!online)
+                OfflineBanner(
+                  message:
+                      AppLocalizations.of(context)?.offline ?? 'You\'re offline',
+                ),
+              Expanded(
+                child: catalog.when(
+                  data: (data) => _HomeContent(data: data),
+                  loading: () => const _HomeSkeleton(),
+                  error: (error, _) => ErrorRetryView(
+                    message:
+                        AppLocalizations.of(context)?.errorGeneric ??
+                        'Something went wrong',
+                    onRetry: () => ref.refresh(catalogDataProvider),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeContent extends ConsumerWidget {
+  const _HomeContent({required this.data});
+
+  final CatalogData data;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final member = data.member;
+    return RefreshIndicator(
+      onRefresh: () => ref.read(catalogRepositoryProvider).refresh(),
+      child: ListView(
+        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+        children: [
+          if (member != null) _MemberHeader(member: member),
+          const SizedBox(height: AppSpacing.md),
+          if (data.banners.isNotEmpty) BannerCarousel(banners: data.banners),
+          const SizedBox(height: AppSpacing.lg),
+          ProductRow(
+            title: l10n?.seasonalSpecials ?? 'Seasonal specials',
+            products: data.productsInSection(CatalogSection.seasonal),
+            emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          ProductRow(
+            title: '${l10n?.popular ?? 'Popular'} 🔥',
+            products: data.productsInSection(CatalogSection.popular),
+            emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          ProductRow(
+            title: l10n?.orderAgain ?? 'Order again',
+            products: data.productsInSection(CatalogSection.orderAgain),
+            emptyMessage: l10n?.emptyGeneric ?? 'Nothing here yet',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          _NearbyShops(shops: data.shops),
+        ],
+      ),
+    );
+  }
+}
+
+class _MemberHeader extends StatelessWidget {
+  const _MemberHeader({required this.member});
+
+  final Member member;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = TierProgress(member.tier, member.points);
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final toNext = DecimalFormatter.format(
+      progress.pointsToNext,
+      locale: locale,
+    );
+    final nextTier =
+        progress.nextTier?.localizedLabel(l10n) ?? l10n?.max ?? 'max';
+    final palette = context.palette;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      child: Row(
+        children: [
+          MemberAvatar(imageUrl: member.photoUrl, size: 44),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        member.name,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: AppTypography.h2Weight,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    TierBadge(
+                      tierLabel: member.tier.localizedLabel(l10n),
+                      color: AppColors.tierColor(member.tier.name),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xxs),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                    vertical: AppSpacing.xxs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: palette.surface,
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                    border: Border.all(color: palette.border),
+                  ),
+                  child: Text(
+                    '$toNext pts left to $nextTier',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: palette.textSecondary,
+                          fontSize: 10,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.xs),
+            child: Badge(
+              label: Text('${member.notificationsCount}'),
+              backgroundColor: palette.secondary,
+              child: IconButton(
+                onPressed: () => context.push('/notifications'),
+                icon: const Icon(Icons.notifications_outlined),
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NearbyShops extends StatelessWidget {
+  const _NearbyShops({required this.shops});
+
+  final List<Shop> shops;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+          child: SectionHeader(
+            title:
+                l10n?.nearbyShopsTitle(shops.length) ??
+                'There are ${shops.length} J\'Donut shops near you',
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        SizedBox(
+          height: ShopCard.heightFor(context),
+          child: shops.isEmpty
+              ? Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                    ),
+                    child: Text(
+                      l10n?.emptyGeneric ?? 'Nothing here yet',
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: context.palette.textMuted),
+                    ),
+                  ),
+                )
+              : ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  itemCount: shops.length,
+                  separatorBuilder: (context, _) =>
+                      const SizedBox(width: AppSpacing.md),
+                  itemBuilder: (context, index) => ShopCard(shop: shops[index]),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HomeSkeleton extends StatelessWidget {
+  const _HomeSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              ShimmerBox(width: 44, height: 44, radius: 22),
+              SizedBox(width: AppSpacing.md),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerBox(width: 140, height: 14),
+                  SizedBox(height: 6),
+                  ShimmerBox(width: 90, height: 10),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: AppSpacing.lg),
+          ShimmerBox(height: 140, radius: 16),
+          SizedBox(height: AppSpacing.lg),
+          ShimmerBox(width: 160, height: 16),
+          SizedBox(height: AppSpacing.md),
+          _SkeletonStrip(),
+          SizedBox(height: AppSpacing.lg),
+          ShimmerBox(width: 120, height: 16),
+          SizedBox(height: AppSpacing.md),
+          _SkeletonStrip(),
+        ],
+      ),
+    );
+  }
+}
+
+class _SkeletonStrip extends StatelessWidget {
+  const _SkeletonStrip();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: ProductTile.heightFor(context),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        itemCount: 3,
+        separatorBuilder: (context, _) => const SizedBox(width: AppSpacing.md),
+        itemBuilder: (context, _) => const ProductTileSkeleton(),
+      ),
+    );
+  }
+}

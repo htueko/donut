@@ -1,0 +1,192 @@
+{
+  "member": {
+    "id": "me",
+    "name": "Su Su Hlaing",
+    "photoUrl": "assets/seed/images/avatar.png",
+    "tier": "silver",
+    "points": 680000,
+    "notificationsCount": 3
+  },
+  "products": [
+    {
+      "id": "p_coconut",
+      "code": "JD022123",
+      "name": "Coconut Donut",
+      "priceMmk": 3200,
+      "isNew": true,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_coconut.png",
+      "description": "Enjoy our scrumptious donuts made with fresh coconut flakes and a light vanilla glaze. Baked every morning.",
+      "section": "seasonal"
+    },
+    {
+      "id": "p_choco",
+      "code": "JD022124",
+      "name": "Chocolate Donut",
+      "priceMmk": 2800,
+      "isNew": false,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_chocolate.png",
+      "description": "Rich cocoa glaze over a fluffy yeast donut, topped with chocolate curls.",
+      "section": "popular"
+    },
+    {
+      "id": "p_strawberry",
+      "code": "JD022125",
+      "name": "Strawberry Donut",
+      "priceMmk": 3000,
+      "isNew": false,
+      "discountPercent": 15,
+      "imageUrl": "assets/seed/images/donut_strawberry.png",
+      "description": "Strawberry glaze with freeze-dried berry pieces for a fruity punch.",
+      "section": "popular"
+    },
+    {
+      "id": "p_matcha",
+      "code": "JD022126",
+      "name": "Matcha Donut",
+      "priceMmk": 3400,
+      "isNew": false,
+      "discountPercent": 10,
+      "imageUrl": "assets/seed/images/donut_matcha.png",
+      "description": "Stone-ground matcha glaze with a subtle earthy sweetness.",
+      "section": "seasonal"
+    },
+    {
+      "id": "p_caramel",
+      "code": "JD022127",
+      "name": "Caramel Donut",
+      "priceMmk": 3000,
+      "isNew": false,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_caramel.png",
+      "description": "Salted caramel drizzle on a classic glazed ring.",
+      "section": "order_again"
+    },
+    {
+      "id": "p_blueberry",
+      "code": "JD022128",
+      "name": "Blueberry Donut",
+      "priceMmk": 3200,
+      "isNew": false,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_blueberry.png",
+      "description": "Blueberry compote glaze bursting with real berries.",
+      "section": "popular"
+    },
+    {
+      "id": "p_mango",
+      "code": "JD022129",
+      "name": "Mango Donut",
+      "priceMmk": 3300,
+      "isNew": false,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_mango.png",
+      "description": "Alphonso mango glaze, a seasonal favourite back by demand.",
+      "section": "seasonal"
+    },
+    {
+      "id": "p_redvelvet",
+      "code": "JD022130",
+      "name": "Red Velvet Donut",
+      "priceMmk": 3500,
+      "isNew": false,
+      "discountPercent": 20,
+      "imageUrl": "assets/seed/images/donut_redvelvet.png",
+      "description": "Cocoa-kissed red velvet cake donut with cream cheese glaze.",
+      "section": "popular"
+    },
+    {
+      "id": "p_original",
+      "code": "JD022131",
+      "name": "Original Glazed",
+      "priceMmk": 2500,
+      "isNew": false,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_original.png",
+      "description": "The one that started it all: a thin, sweet honey glaze.",
+      "section": "order_again"
+    },
+    {
+      "id": "p_tiramisu",
+      "code": "JD022132",
+      "name": "Tiramisu Donut",
+      "priceMmk": 3600,
+      "isNew": true,
+      "discountPercent": null,
+      "imageUrl": "assets/seed/images/donut_tiramisu.png",
+      "description": "Espresso mascarpone glaze dusted with cocoa.",
+      "section": "seasonal"
+    }
+  ],
+  "banners": [
+    {
+      "id": "b_specials",
+      "imageUrl": "assets/seed/images/banner_specials.png",
+      "title": "Seasonal specials",
+      "sortOrder": 0
+    },
+    {
+      "id": "b_new",
+      "imageUrl": "assets/seed/images/banner_new.png",
+      "title": "New arrivals",
+      "sortOrder": 1
+    },
+    {
+      "id": "b_reward",
+      "imageUrl": "assets/seed/images/banner_reward.png",
+      "title": "Double points weekend",
+      "sortOrder": 2
+    }
+  ],
+  "shops": [
+    {
+      "id": "s_city",
+      "name": "J'Donut City Mart",
+      "address": "No. 12, Pyay Road, Kamayut",
+      "distanceLabel": "0.8 km away",
+      "imageUrl": "assets/seed/images/shop_city.png",
+      "isOpen": true
+    },
+    {
+      "id": "s_university",
+      "name": "J'Donut University Ave",
+      "address": "University Avenue Road, Bahan",
+      "distanceLabel": "1.6 km away",
+      "imageUrl": "assets/seed/images/shop_university.png",
+      "isOpen": true
+    },
+    {
+      "id": "s_river",
+      "name": "J'Donut Riverside",
+      "address": "Strand Road, Kyauktada",
+      "distanceLabel": "2.3 km away",
+      "imageUrl": "assets/seed/images/shop_river.png",
+      "isOpen": false
+    },
+    {
+      "id": "s_mandalay",
+      "name": "J'Donut Mandalay",
+      "address": "66th Street, Chanayetharzar",
+      "distanceLabel": "3.1 km away",
+      "imageUrl": "assets/seed/images/shop_mandalay.png",
+      "isOpen": true
+    }
+  ],
+  "challenges": [
+    {
+      "id": "ch_donuts",
+      "title": "Eat 4 donuts this week",
+      "kind": "donut",
+      "current": 1,
+      "target": 4
+    },
+    {
+      "id": "ch_coffee",
+      "title": "Collect 12 coffee stamps",
+      "kind": "coffee",
+      "current": 9,
+      "target": 12
+    }
+  ]
+}
