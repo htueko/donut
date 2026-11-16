@@ -112,9 +112,8 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
               Text(
                 'Enter your phone number',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: AppTypography.h2Weight,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: AppTypography.h2Weight),
               ),
               const SizedBox(height: AppSpacing.xxl),
               Container(
@@ -137,9 +136,9 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
                     Text(
                       '+95',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: palette.textSecondary,
-                            fontWeight: AppTypography.subtitleWeight,
-                          ),
+                        color: palette.textSecondary,
+                        fontWeight: AppTypography.subtitleWeight,
+                      ),
                     ),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
@@ -173,9 +172,7 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   errorText,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
+                  style: Theme.of(context).textTheme.bodySmall
                       ?.copyWith(color: palette.danger),
                 ),
               ],
@@ -211,14 +208,11 @@ class _DisclaimerFooter extends StatelessWidget {
     final palette = context.palette;
     return Text.rich(
       TextSpan(
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: palette.textMuted,
-              fontSize: 11,
-            ),
+        style: Theme.of(context).textTheme.bodySmall
+            ?.copyWith(color: palette.textMuted, fontSize: 11),
         children: [
           const TextSpan(
-            text:
-                'By continuing, you acknowledge that you have read and agree to our ',
+            text: 'By continuing, you acknowledge that you have read and agree to our ',
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.baseline,

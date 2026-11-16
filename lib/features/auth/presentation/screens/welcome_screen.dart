@@ -120,9 +120,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Text(
                     l10n?.welcomeTitle ?? 'Welcome to the world of J\'donuts',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: AppTypography.h1Weight,
-                        ),
+                    style: Theme.of(context).textTheme.headlineMedium
+                        ?.copyWith(fontWeight: AppTypography.h1Weight),
                   ),
                 ),
               ),

@@ -9,12 +9,7 @@ class AppShell extends StatelessWidget {
 
   final Widget child;
 
-  static const _tabs = <String>[
-    '/home',
-    '/rewards',
-    '/cart',
-    '/settings',
-  ];
+  static const _tabs = <String>['/home', '/rewards', '/cart', '/settings'];
 
   @override
   Widget build(BuildContext context) {

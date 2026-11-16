@@ -147,12 +147,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               ),
                               child: Text.rich(
                                 TextSpan(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: palette.textSecondary,
-                                      ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(color: palette.textSecondary),
                                   children: [
                                     const TextSpan(
                                       text: 'Already have an account? ',
@@ -347,12 +343,20 @@ class _SocialRow extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.md),
           _SocialButton(
-            icon: Icon(Icons.apple, color: context.palette.textPrimary, size: 24),
+            icon: Icon(
+              Icons.apple,
+              color: context.palette.textPrimary,
+              size: 24,
+            ),
             onTap: onComingSoon,
           ),
           const SizedBox(width: AppSpacing.md),
           _SocialButton(
-            icon: const Icon(Icons.facebook, color: Color(0xFF1877F2), size: 24),
+            icon: const Icon(
+              Icons.facebook,
+              color: Color(0xFF1877F2),
+              size: 24,
+            ),
             onTap: onComingSoon,
           ),
         ],
@@ -449,14 +453,11 @@ class _LegalLinks extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
       child: Text.rich(
         TextSpan(
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: palette.textMuted,
-                fontSize: 11,
-              ),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: palette.textMuted, fontSize: 11),
           children: [
             const TextSpan(
-              text:
-                  'By continuing, you acknowledge that you have read and agree to our ',
+              text: 'By continuing, you acknowledge that you have read and agree to our ',
             ),
             WidgetSpan(
               alignment: PlaceholderAlignment.baseline,

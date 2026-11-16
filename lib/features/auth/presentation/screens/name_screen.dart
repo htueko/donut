@@ -132,16 +132,17 @@ class _NameScreenState extends ConsumerState<NameScreen> {
               Text(
                 'What\'s your name?',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: AppTypography.h2Weight,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: AppTypography.h2Weight),
               ),
               const SizedBox(height: AppSpacing.xxl),
               _NameCardInput(
                 controller: _firstController,
                 focusNode: _firstFocus,
                 hintText: l10n?.firstNameLabel ?? 'First Name',
-                errorText: firstError == null ? null : _messageFor(firstError, l10n),
+                errorText: firstError == null
+                    ? null
+                    : _messageFor(firstError, l10n),
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => _lastFocus.requestFocus(),
                 onChanged: (_) => setState(() {}),
@@ -151,7 +152,9 @@ class _NameScreenState extends ConsumerState<NameScreen> {
                 controller: _lastController,
                 focusNode: _lastFocus,
                 hintText: l10n?.lastNameLabel ?? 'Last Name',
-                errorText: lastError == null ? null : _messageFor(lastError, l10n),
+                errorText: lastError == null
+                    ? null
+                    : _messageFor(lastError, l10n),
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) => _submit(),
                 onChanged: (_) => setState(() {}),
@@ -227,9 +230,8 @@ class _NameCardInput extends StatelessWidget {
               fillColor: Colors.transparent,
               filled: false,
               hintText: hintText,
-              hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: palette.textMuted,
-                  ),
+              hintStyle: Theme.of(context).textTheme.bodyLarge
+                  ?.copyWith(color: palette.textMuted),
               contentPadding: EdgeInsets.zero,
             ),
             onChanged: onChanged,
@@ -240,9 +242,7 @@ class _NameCardInput extends StatelessWidget {
           const SizedBox(height: AppSpacing.xs),
           Text(
             errorText!,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
+            style: Theme.of(context).textTheme.bodySmall
                 ?.copyWith(color: palette.danger),
           ),
         ],
@@ -262,14 +262,11 @@ class _DisclaimerFooter extends StatelessWidget {
     final palette = context.palette;
     return Text.rich(
       TextSpan(
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: palette.textMuted,
-              fontSize: 11,
-            ),
+        style: Theme.of(context).textTheme.bodySmall
+            ?.copyWith(color: palette.textMuted, fontSize: 11),
         children: [
           const TextSpan(
-            text:
-                'By continuing, you acknowledge that you have read and agree to our ',
+            text: 'By continuing, you acknowledge that you have read and agree to our ',
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.baseline,

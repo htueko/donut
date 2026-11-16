@@ -249,17 +249,15 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
               Text(
                 l10n?.verifyTitle ?? 'Verify your number',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: AppTypography.h2Weight,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: AppTypography.h2Weight),
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
                 'We\'ve sent 6 digit OTP to +95${phone ?? ''}',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: context.palette.textSecondary,
-                    ),
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: context.palette.textSecondary),
               ),
               const SizedBox(height: AppSpacing.xl),
               AnimatedBuilder(
@@ -301,9 +299,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen>
                         l10n?.resendIn(_formatClock()) ??
                             'Resend in ${_formatClock()}',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: context.palette.textSecondary,
-                            ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: context.palette.textSecondary),
                       )
                     : TextButton(
                         onPressed: _resend,
@@ -362,14 +359,11 @@ class _DisclaimerFooter extends StatelessWidget {
     final palette = context.palette;
     return Text.rich(
       TextSpan(
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: palette.textMuted,
-              fontSize: 11,
-            ),
+        style: Theme.of(context).textTheme.bodySmall
+            ?.copyWith(color: palette.textMuted, fontSize: 11),
         children: [
           const TextSpan(
-            text:
-                'By continuing, you acknowledge that you have read and agree to our ',
+            text: 'By continuing, you acknowledge that you have read and agree to our ',
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.baseline,

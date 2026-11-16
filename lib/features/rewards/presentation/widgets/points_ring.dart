@@ -94,9 +94,9 @@ class _PointsRingState extends State<PointsRing>
                   Text(
                     widget.centerLabel,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: palette.secondary,
-                          fontWeight: AppTypography.subtitleWeight,
-                        ),
+                      color: palette.secondary,
+                      fontWeight: AppTypography.subtitleWeight,
+                    ),
                   ),
                 ],
               ),

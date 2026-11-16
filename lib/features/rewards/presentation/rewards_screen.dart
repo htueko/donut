@@ -76,9 +76,8 @@ class _RewardsContent extends StatelessWidget {
             Expanded(
               child: Text(
                 'J\' Donuts Rewards',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: AppTypography.h1Weight,
-                    ),
+                style: Theme.of(context).textTheme.headlineMedium
+                    ?.copyWith(fontWeight: AppTypography.h1Weight),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -99,9 +98,9 @@ class _RewardsContent extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)?.rewardsTitle ?? 'Rewards',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: palette.onAccent,
-                          fontWeight: AppTypography.buttonWeight,
-                        ),
+                      color: palette.onAccent,
+                      fontWeight: AppTypography.buttonWeight,
+                    ),
                   ),
                   const SizedBox(width: AppSpacing.xxs),
                   Container(

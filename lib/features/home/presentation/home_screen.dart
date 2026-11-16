@@ -44,7 +44,8 @@ class HomeScreen extends ConsumerWidget {
               if (!online)
                 OfflineBanner(
                   message:
-                      AppLocalizations.of(context)?.offline ?? 'You\'re offline',
+                      AppLocalizations.of(context)?.offline ??
+                      'You\'re offline',
                 ),
               Expanded(
                 child: catalog.when(
@@ -142,9 +143,8 @@ class _MemberHeader extends StatelessWidget {
                     Flexible(
                       child: Text(
                         member.name,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: AppTypography.h2Weight,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: AppTypography.h2Weight),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -171,10 +171,8 @@ class _MemberHeader extends StatelessWidget {
                     '$toNext pts left to $nextTier',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: palette.textSecondary,
-                          fontSize: 10,
-                        ),
+                    style: Theme.of(context).textTheme.labelSmall
+                        ?.copyWith(color: palette.textSecondary, fontSize: 10),
                   ),
                 ),
               ],

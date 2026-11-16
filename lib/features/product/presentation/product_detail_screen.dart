@@ -124,9 +124,9 @@ class _ProductDetail extends StatelessWidget {
                   Text(
                     l10n?.productCode(product.code) ?? 'Code ${product.code}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: palette.textSecondary,
-                          fontWeight: AppTypography.captionWeight,
-                        ),
+                      color: palette.textSecondary,
+                      fontWeight: AppTypography.captionWeight,
+                    ),
                   ),
                   if (product.isNew)
                     Container(
@@ -136,15 +136,17 @@ class _ProductDetail extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: palette.accent,
-                        borderRadius: BorderRadius.circular(AppSpacing.radiusPill),
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.radiusPill,
+                        ),
                       ),
                       child: Text(
                         l10n?.newBadge ?? 'New',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: palette.onAccent,
-                              fontWeight: AppTypography.buttonWeight,
-                              fontSize: 10,
-                            ),
+                          color: palette.onAccent,
+                          fontWeight: AppTypography.buttonWeight,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                 ],
@@ -152,9 +154,8 @@ class _ProductDetail extends StatelessWidget {
               const SizedBox(height: AppSpacing.xs),
               Text(
                 product.name,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: AppTypography.h1Weight,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: AppTypography.h1Weight),
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
@@ -164,9 +165,9 @@ class _ProductDetail extends StatelessWidget {
                   unit: l10n?.mmk ?? 'MMK',
                 ),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: palette.textPrimary,
-                      fontWeight: AppTypography.h2Weight,
-                    ),
+                  color: palette.textPrimary,
+                  fontWeight: AppTypography.h2Weight,
+                ),
               ),
               const SizedBox(height: AppSpacing.md),
               Center(
@@ -218,9 +219,8 @@ class _ProductDetail extends StatelessWidget {
             const SizedBox(width: AppSpacing.sm),
             Text(
               l10n?.whatsThis ?? 'What\'s this?',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: AppTypography.h2Weight,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: AppTypography.h2Weight),
             ),
           ],
         ),
@@ -229,10 +229,8 @@ class _ProductDetail extends StatelessWidget {
           product.description.isEmpty
               ? (l10n?.emptyGeneric ?? 'Nothing here yet')
               : product.description,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: palette.textSecondary,
-                height: 1.5,
-              ),
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(color: palette.textSecondary, height: 1.5),
         ),
         const SizedBox(height: AppSpacing.xxl),
         _AddToCartBar(product: product, quantity: quantity),
@@ -265,9 +263,8 @@ class _AddToCartBar extends StatelessWidget {
           children: [
             Text(
               l10n?.total ?? 'Total',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: palette.textSecondary,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: palette.textSecondary),
             ),
             const Spacer(),
             AnimatedSwitcher(
@@ -276,9 +273,9 @@ class _AddToCartBar extends StatelessWidget {
                 formattedTotal,
                 key: ValueKey<int>(total),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: palette.textPrimary,
-                      fontWeight: AppTypography.h1Weight,
-                    ),
+                  color: palette.textPrimary,
+                  fontWeight: AppTypography.h1Weight,
+                ),
               ),
             ),
           ],

@@ -88,7 +88,9 @@ class _DobScreenState extends ConsumerState<DobScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
-    final error = _date == null ? null : DobValidator.validate(_date).messageKey;
+    final error = _date == null
+        ? null
+        : DobValidator.validate(_date).messageKey;
     final monthStr = _date != null ? DateFormat('MMMM').format(_date!) : '';
     final dayStr = _date != null ? _date!.day.toString() : '';
     final yearStr = _date != null ? _date!.year.toString() : '';
@@ -112,9 +114,8 @@ class _DobScreenState extends ConsumerState<DobScreen> {
               Text(
                 'What\'s your date of birth?',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: AppTypography.h2Weight,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: AppTypography.h2Weight),
               ),
               const SizedBox(height: AppSpacing.xxl),
               InkWell(
@@ -206,9 +207,7 @@ class _DobCardField extends StatelessWidget {
       decoration: BoxDecoration(
         color: palette.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-        border: Border.all(
-          color: isFilled ? palette.primary : palette.border,
-        ),
+        border: Border.all(color: isFilled ? palette.primary : palette.border),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
@@ -217,9 +216,11 @@ class _DobCardField extends StatelessWidget {
       child: Text(
         isFilled ? valueText : hintText,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: isFilled ? palette.textPrimary : palette.textMuted,
-              fontWeight: isFilled ? AppTypography.subtitleWeight : AppTypography.bodyWeight,
-            ),
+          color: isFilled ? palette.textPrimary : palette.textMuted,
+          fontWeight: isFilled
+              ? AppTypography.subtitleWeight
+              : AppTypography.bodyWeight,
+        ),
       ),
     );
   }
@@ -236,14 +237,11 @@ class _DisclaimerFooter extends StatelessWidget {
     final palette = context.palette;
     return Text.rich(
       TextSpan(
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: palette.textMuted,
-              fontSize: 11,
-            ),
+        style: Theme.of(context).textTheme.bodySmall
+            ?.copyWith(color: palette.textMuted, fontSize: 11),
         children: [
           const TextSpan(
-            text:
-                'By continuing, you acknowledge that you have read and agree to our ',
+            text: 'By continuing, you acknowledge that you have read and agree to our ',
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.baseline,
